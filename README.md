@@ -1,16 +1,5 @@
 # co2score
 
-A new Flutter project.
+Application hybride réalisé dans le cadre du projet de L3 informatique de la fac de science de Montpellier.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+co2Score est une application qui à pour but d'informer les usagers de cantines de l'impact carbones qu'ont les plats qu'ils mangent.
