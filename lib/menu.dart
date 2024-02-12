@@ -4,7 +4,7 @@ import 'visuPlat.dart';
 
 class pageMenu extends StatelessWidget {   //page avec la liste des plats
 
-  final List<String> buttonTexts = ['Page 1', 'Page 2', 'Page 3'];
+  final List<String> buttonTexts = ['Page 1', 'Page 2', 'Page 3','page4', 'Page 3', 'Page 3', 'Page 3', 'Page 3', 'Page 3'];
 
 
   @override
@@ -52,40 +52,6 @@ class pageMenu extends StatelessWidget {   //page avec la liste des plats
 
       ),
 
-
-
-
-     /* body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => pageCreation()), // passe à la page avec la liste de tout les plats
-            );
-          },
-          child: Text('Ajouter un plat'),
-        )
-      )
-
-
-      body: Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: buttonTexts.map(
-                (text) => ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => pageVisu(),
-                        ),
-                      );
-                    },
-                    child: Text(text),
-                  ),
-                ).toList(),
-    ),
-    )  */
 
     );
   }

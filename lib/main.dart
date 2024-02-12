@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
 import 'menu.dart';
-//salut
 
 void main() {   //fonction main de l'app
   SystemChrome.setPreferredOrientations([
@@ -17,7 +16,6 @@ void main() {   //fonction main de l'app
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
