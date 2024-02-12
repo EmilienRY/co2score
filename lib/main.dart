@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
 import 'menu.dart';
+//salut
 
 void main() {   //fonction main de l'app
   SystemChrome.setPreferredOrientations([
