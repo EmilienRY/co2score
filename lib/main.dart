@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
 import 'menu.dart';
+import 'scan.dart';
 
 void main() {   //fonction main de l'app
   SystemChrome.setPreferredOrientations([
@@ -83,13 +83,11 @@ class _MyHomePageState extends State<MyHomePage> {
             flex: 5,
             child: QRView(key: qrKey, onQRViewCreated: _onQrViewCreated)   //emplacement du scanner QRcode
           ),
-          Expanded(
-              flex: 1,
-            child: Center(
-                child: (result != null) ? Text("Barcode Type: ${result!.format.name} Data: ${result!.code} ") : const Text("Scan a code")  // affiche les valeurs scan pour le moment
-              ),
-        )
-      ],),
+
+          // Text("Barcode Type: ${result!.format.name} Data: ${result!.code} ") : const Text("Scan a code")
+
+      ],
+    ),
 
     );
   }
@@ -98,8 +96,15 @@ class _MyHomePageState extends State<MyHomePage> {
     this.controller=controller;
     controller.scannedDataStream.listen((scanData) { 
       setState(() {
-        result=scanData;
+        result = scanData;
       });
+      controller.pauseCamera();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PageScan(scan: scanData.code!),),
+      ).then((_) => controller.resumeCamera());
+
     });
   }
 
