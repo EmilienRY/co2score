@@ -2,34 +2,30 @@ import 'package:flutter/material.dart';
 import 'menu.dart';
 
 
-class pageCreation extends StatelessWidget {   //page avec la liste des plats
+class pageCreation extends StatefulWidget {
   @override
+  _MyPageState createState() => _MyPageState();
+}
 
+class _MyPageState extends State<pageCreation> {
     final  TextField ingredient=TextField(
-    obscureText: true,
     decoration: InputDecoration(
       border: OutlineInputBorder(),
       labelText: 'Ingrédient',
     ),
   );
-  final List <TextField> ListIngredient =[TextField(
-  obscureText: true,
-  decoration: InputDecoration(
-  border: OutlineInputBorder(),
-  labelText: 'Ingrédient',
-  ),
-  ),];
+  final List <TextField> ListIngredient=[];
   Widget build(BuildContext context) {
     void _ajoutIngredient(){
-      ListIngredient.add(ingredient);
-      print(ListIngredient);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => pageCreation()), // Passe à la page avec la liste de tous les plats
-      );
+      setState(() {
+        ListIngredient.add(ingredient);
+        const SizedBox(height: 10);
+      });
       }
       void _supIngredient(){
-      ListIngredient.remove(ListIngredient.last);
+      setState(() {
+        ListIngredient.remove(ListIngredient.last);
+      });
       }
 
     return Scaffold(
@@ -39,6 +35,16 @@ class pageCreation extends StatelessWidget {   //page avec la liste des plats
       body: Center(
       child:Column(
       children: [
+        Column(children: [
+          const SizedBox(height: 30),
+        TextField(
+        //obscureText: true,        pour mettre en mode mot de passe
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Nom du plat',
+        ),
+      ),],
+      ),
       Column(children: ListIngredient),
       Column(
         children: [
@@ -56,6 +62,12 @@ class pageCreation extends StatelessWidget {   //page avec la liste des plats
         },
         child: const Text('Supprimer un ingrédient'),
       ),
+          const SizedBox(height: 30),
+          ElevatedButton(
+            onPressed: () {
+            },
+            child: const Text('Valider'),
+          ),
       ],
       ),
       ],),),);
