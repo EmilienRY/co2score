@@ -61,7 +61,7 @@ class _pageMenuState extends State<pageMenu> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => pageVisu(),
+                          builder: (context) => pageVisu(recette: text),
                         ),
                       );
                     },
@@ -70,7 +70,7 @@ class _pageMenuState extends State<pageMenu> {
                 ).toList(),
               ),
             if (buttonTexts.isEmpty)
-              CircularProgressIndicator(), // Affichez une indication de chargement tant que les données ne sont pas chargées
+              CircularProgressIndicator(),
           ],
         ),
       ),

@@ -12,7 +12,6 @@ void main() {   //fonction main de l'app
   runApp(const MyApp());  //lance l'application
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -83,27 +82,27 @@ class _MyHomePageState extends State<MyHomePage> {
             flex: 5,
             child: QRView(key: qrKey, onQRViewCreated: _onQrViewCreated)   //emplacement du scanner QRcode
           ),
-
-          // Text("Barcode Type: ${result!.format.name} Data: ${result!.code} ") : const Text("Scan a code")
-
       ],
     ),
 
     );
   }
   
-  void _onQrViewCreated(QRViewController controller){   //vonction qui initialize le scanner et passe en écoute. Stocke valeur du scan dans variable result
-    this.controller=controller;
+  void _onQrViewCreated(QRViewController controller){   //vonction qui initialize le scanner et passe en écoute
+    this.controller=controller; //récupère la caméra
     controller.scannedDataStream.listen((scanData) { 
       setState(() {
-        result = scanData;
+        result = scanData;  //stock la valeur du scan dans variable
       });
-      controller.pauseCamera();
+      controller.pauseCamera();  // arrète la cam quand un qr code est scané
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PageScan(scan: scanData.code!),),
-      ).then((_) => controller.resumeCamera());
+          builder: (context) => PageScan(scan: scanData.code!),  //on va sur la page
+                                          // PageScan et on donne la valeur du scan en paramètre
+        ),
+
+      ).then((_) => controller.resumeCamera()); //on relance la cam quand on revient sur cette page
 
     });
   }
