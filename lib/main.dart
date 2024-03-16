@@ -3,12 +3,30 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
 import 'menu.dart';
 import 'scan.dart';
+import 'database.dart';
 
-void main() {   //fonction main de l'app
+void main() async {   //fonction main de l'app
+
+  WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  // Vérifier si la base de données existe
+  final database = DatabaseHelper.instance;
+  final isDatabaseExists = await database.isDatabaseExists();
+
+  // Si la base de données n'existe pas, créer la structure
+  if (!isDatabaseExists) {
+    await database.createDatabase();
+    print('bd bien créé');
+    print('---------------------------------------------------------------------------');
+
+  }
+
+
   runApp(const MyApp());  //lance l'application
 }
 

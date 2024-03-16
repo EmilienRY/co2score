@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'CreationPlat.dart';
 import 'visuPlat.dart';
-import 'package:csv/csv.dart';
+import 'database.dart';
 
 class pageMenu extends StatefulWidget {
   @override
@@ -19,14 +19,15 @@ class _pageMenuState extends State<pageMenu> {
   }
 
   Future<void> _loadData() async {
-    final String csvString = await rootBundle.loadString('assets/plat.csv');
-    final List<List<dynamic>> fields = CsvToListConverter().convert(csvString);
-    // Assuming the first column contains the dish names
-    setState(() {
-      for (final row in fields) {
-        buttonTexts.add(row[0]);
-      }
-    });
+    try {
+      // Récupérer les noms des plats depuis la base de données
+      final plats = await DatabaseHelper.instance.queryAllPlats();
+      setState(() {
+        buttonTexts = plats.map<String>((plat) => plat['nom'] as String).toList();
+      });
+    } catch (e) {
+      print('Erreur lors du chargement des données depuis la base de données: $e');
+    }
   }
 
   @override

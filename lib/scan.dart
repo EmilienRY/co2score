@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class RecipeIngredient {  // classe pour stocker chaques ingrédients
   final String name;
   final Color color;
-
   RecipeIngredient({required this.name, required this.color});
 }
 
@@ -29,13 +28,9 @@ class PageScan extends StatelessWidget {
       );
     }
 
-
-
-
     // Diviser la chaîne scan en une liste d'ingrédients
     List<String> recipes = scan.split(';');
     List<RecipeIngredient> ingredients = [];
-
 
     // Parcourir la liste des recettes et des ingrédients pour les séparer
     recipes.forEach((recipe) {

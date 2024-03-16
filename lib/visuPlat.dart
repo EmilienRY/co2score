@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:csv/csv.dart';
-import 'dart:async' show Future;
-import 'package:flutter/services.dart' show rootBundle;
+import 'database.dart'; // Importez la classe Database
 
 class RecipeIngredient {
   final String name;
@@ -15,38 +13,26 @@ class pageVisu extends StatelessWidget {
 
   pageVisu({required this.recette});
 
-  Future<List<List<dynamic>>> lireFichierCsv(String chemin) async {
-    final data = await rootBundle.loadString(chemin);
-    return CsvToListConverter().convert(data);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<List<dynamic>>>(
-      future: lireFichierCsv('assets/plat.csv'),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _getRecipeDetails(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text('Erreur de chargement du fichier');
+          return Text('Erreur de chargement des détails de la recette');
         } else {
-          var data = snapshot.data!;
-          var recetteDetail = data.firstWhere((row) => row[0] == recette, orElse: () => []);
-
+          final Map<String, dynamic> recetteDetail = snapshot.data!;
           if (recetteDetail.isEmpty) {
-            return Text('Recette non trouvée dans le fichier');
+            return Text('Recette non trouvée dans la base de données');
           } else {
-            String inter = recetteDetail.toString();
-            String recetteString=inter.replaceAll('[', '').replaceAll(']', '');
-            print(recetteString);
-
+            String recetteString = recetteDetail['ingredients'];
             List<String> recipes = recetteString.split(';');
-            print(recipes);
             List<RecipeIngredient> ingredients = [];
 
             recipes.forEach((recipe) {
               List<String> recipeDetails = recipe.split(',');
-              print(recipeDetails);
               if (recipeDetails.length >= 2) {
                 String name = recipeDetails[0];
                 Color? color = _parseColor(recipeDetails[1]);
@@ -58,35 +44,65 @@ class pageVisu extends StatelessWidget {
 
             return Scaffold(
               appBar: AppBar(
-                title: Text(ingredients.isNotEmpty ? ingredients.first.name : 'Aucune recette'),
+                title: Text(ingredients.isNotEmpty ? recetteDetail['nom'] : 'Aucune recette'),
               ),
-              body: ListView.separated(
-                itemCount: ingredients.length,
-                separatorBuilder: (context, index) => Divider(),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Row(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: ingredients[index].color ?? Colors.black,
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Text(ingredients[index].name),
-                      ],
+                body: Column(
+                  children: [
+                  Container(
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(20),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _parseColor(recetteDetail['couleur'] ?? ''),
                     ),
-                  );
-                },
-              ),
+                  ),
+                ),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: ingredients.length,
+                  separatorBuilder: (context, index) => Divider(),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Row(
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: ingredients[index].color ?? Colors.black,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(ingredients[index].name),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+              )
+            ],
+                )
             );
           }
         }
       },
     );
+  }
+
+  Future<Map<String, dynamic>> _getRecipeDetails() async {
+    try {
+      // Récupérer les détails de la recette depuis la base de données
+      return await DatabaseHelper.instance.getPlat(recette) ?? {};
+    } catch (e) {
+      print('Erreur lors de la récupération des détails de la recette: $e');
+      return {};
+    }
   }
 
   Color? _parseColor(String colorString) {
