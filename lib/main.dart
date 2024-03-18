@@ -25,7 +25,7 @@ void main() async {   //fonction main de l'app
     print('---------------------------------------------------------------------------');
 
   }
-
+//plat de test
   final plat1={
     'nom': 'Chili con carne',
     'couleur': 'rouge',
@@ -37,6 +37,8 @@ void main() async {   //fonction main de l'app
     'couleur': 'rouge',
     'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert'
   };
+
+
   try{
     database.insertPlat(plat1);
     database.insertPlat(plat2);

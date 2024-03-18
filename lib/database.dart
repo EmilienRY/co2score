@@ -5,13 +5,12 @@ class DatabaseHelper {
   static final _databaseName = 'plat.db';
   static final _databaseVersion = 1;
 
-  // Définir les noms de tables et les colonnes
+  // nom des tables et colonnes
   static final tablePlats = 'plat';
   static final columnNom = 'nom';
   static final columnCouleur = 'couleur';
   static final columnIngredients = 'ingredients';
 
-  // Faire en sorte que la classe soit un singleton
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -37,9 +36,6 @@ class DatabaseHelper {
       ''');
         });
   }
-
-
-
 
 
   // Créer une instance de base de données SQLite
@@ -69,7 +65,8 @@ class DatabaseHelper {
     ''');
   }
 
-  // Opérations CRUD pour les plats
+
+  // Opérations pour les plats
   Future<int> insertPlat(Map<String, dynamic> plat) async {
     Database db = await instance.database;
     return await db.insert(tablePlats, plat);
@@ -99,7 +96,4 @@ class DatabaseHelper {
       return null; // Retourner null si aucun plat avec ce nom n'est trouvé
     }
   }
-
-
-// Ajouter d'autres méthodes CRUD selon vos besoins
 }

@@ -5,6 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as p;
 import 'database.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'dart:typed_data';
 
 class GeneratePdfPage extends StatefulWidget {
   @override
@@ -33,11 +35,6 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       print("Erreur lors de la récupération des plats depuis la base de données : $e");
     }
   }
-
-
-
-
-
 
 
   @override
@@ -100,12 +97,14 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
 
 
     final pdf = p.Document();
+    final qrImageData = await _generateQrImageData("Rougaille Saucisse,Rouge;huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert");
+
     pdf.addPage(
       p.Page(
         build: (context) {
           return p.Column(
             children: [
-              p.Text("Liste des plats sélectionnés :"),
+              p.Text("Menu du jour :"),
               for (var i = 0; i < selectedPlats.length; i++)
                 p.Row(
                   children: [
@@ -117,9 +116,16 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                         shape: p.BoxShape.circle,
                         color: colors[i],
                       ),
-                    )
+                    ),
                   ]
-                )
+                ),
+                p.SizedBox(height: 20),
+                p.Text("détails du menu "),
+                p.Container(
+                width: 100,
+                height: 100,
+                child: p.Image(p.MemoryImage(qrImageData)),
+              ),
             ],
           );
         },
@@ -156,8 +162,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         return color;
       }
     }
-    // Retourne une couleur par défaut si la couleur n'est pas valide ou si elle n'est pas trouvée
-    return PdfColor.fromHex('#808080');
+    return PdfColor.fromHex('#808080');  // si problème pour trouver couleur met du gris
   }
 
   void openPdfExternally(String path) async {
@@ -167,4 +172,21 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       print("Erreur lors de l'ouverture du PDF: $e");
     }
   }
+
+  Future<Uint8List> _generateQrImageData(String data) async {
+    final qrPainter = QrPainter(
+      data: data,
+      version: QrVersions.auto,
+      gapless: false,
+      color: Colors.black,
+      emptyColor: Colors.white,
+    );
+    final qrCode = await qrPainter.toImageData(200.0);
+    if (qrCode != null) {
+      return Uint8List.fromList(qrCode.buffer.asUint8List());
+    } else {
+      throw Exception("Erreur lors de la génération du QR code");
+    }
+  }
+
 }
