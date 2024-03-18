@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'menu.dart';
 
 
 class pageCreation extends StatefulWidget {
@@ -8,12 +7,14 @@ class pageCreation extends StatefulWidget {
 }
 
 class _MyPageState extends State<pageCreation> {
+
     final  TextField ingredient=TextField(
     decoration: InputDecoration(
       border: OutlineInputBorder(),
       labelText: 'Ingrédient',
     ),
   );
+
   final List <TextField> ListIngredient=[];
   Widget build(BuildContext context) {
     void _ajoutIngredient(){
@@ -38,7 +39,6 @@ class _MyPageState extends State<pageCreation> {
         Column(children: [
           const SizedBox(height: 30),
         TextField(
-        //obscureText: true,        pour mettre en mode mot de passe
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Nom du plat',
@@ -70,5 +70,8 @@ class _MyPageState extends State<pageCreation> {
           ),
       ],
       ),
-      ],),),);
+      ],
+      ),
+      ),
+    );
 }}

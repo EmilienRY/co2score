@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'CreationPlat.dart';
 import 'visuPlat.dart';
 import 'database.dart';
+import 'creationEtiquette.dart';
 
 class pageMenu extends StatefulWidget {
   @override
@@ -48,6 +49,15 @@ class _pageMenuState extends State<pageMenu> {
                 );
               },
               child: Text('Ajouter un plat'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GeneratePdfPage()),
+                );
+              },
+              child: Text('créer une étiquette'),
             ),
             SizedBox(height: 20),
             Text(
