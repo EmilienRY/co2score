@@ -26,6 +26,25 @@ void main() async {   //fonction main de l'app
 
   }
 
+  final plat1={
+    'nom': 'Chili con carne',
+    'couleur': 'rouge',
+    'ingredients': 'Boeuf haché,Rouge;maïs,Vert;Oignons,Vert;Haricot rouge,Vert;Tomate,Vert'
+  };
+
+  final plat2={
+    'nom': 'Rougaille Saucisse',
+    'couleur': 'rouge',
+    'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert'
+  };
+  try{
+    database.insertPlat(plat1);
+    database.insertPlat(plat2);
+  }
+  catch(e){
+    print('erreur lors insertion');
+  }
+
 
   runApp(const MyApp());  //lance l'application
 }

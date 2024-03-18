@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'CreationPlat.dart';
 import 'visuPlat.dart';
@@ -21,7 +20,6 @@ class _pageMenuState extends State<pageMenu> {
 
   Future<void> _loadData() async {
     try {
-      // Récupérer les noms des plats depuis la base de données
       final plats = await DatabaseHelper.instance.queryAllPlats();
       setState(() {
         buttonTexts = plats.map<String>((plat) => plat['nom'] as String).toList();
@@ -37,54 +35,85 @@ class _pageMenuState extends State<pageMenu> {
       appBar: AppBar(
         title: Text('page des menus'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => pageCreation()),
-                );
-              },
-              child: Text('Ajouter un plat'),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => pageCreation()),
+                    );
+                  },
+                  child: Text('Ajouter un plat'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GeneratePdfPage()),
+                    );
+                  },
+                  child: Text('Créer une étiquette'),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GeneratePdfPage()),
-                );
-              },
-              child: Text('créer une étiquette'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Contenu sous le bouton',
-              style: TextStyle(fontSize: 18),
-            ),
-            if (buttonTexts.isNotEmpty)
-              Column(
-                children: buttonTexts.map(
-                      (text) => ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => pageVisu(recette: text),
-                        ),
-                      );
-                    },
-                    child: Text(text),
-                  ),
-                ).toList(),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'Contenu sous le bouton',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    if (buttonTexts.isNotEmpty)
+                      Column(
+                        children: buttonTexts.map(
+                              (text) => ListTile(
+                            title: Text(text),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                _deletePlat(text);
+                              },
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => pageVisu(recette: text),
+                                ),
+                              );
+                            },
+                          ),
+                        ).toList(),
+                      ),
+                    if (buttonTexts.isEmpty)
+                      CircularProgressIndicator(),
+                  ],
+                ),
               ),
-            if (buttonTexts.isEmpty)
-              CircularProgressIndicator(),
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  void _deletePlat(String nomPlat) async {
+    try {
+      await DatabaseHelper.instance.deletePlat(nomPlat);
+      _loadData();
+    } catch (e) {
+      print('Erreur lors de la suppression du plat: $e');
+    }
   }
 }

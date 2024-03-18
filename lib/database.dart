@@ -80,6 +80,11 @@ class DatabaseHelper {
     return await db.query(tablePlats);
   }
 
+  Future<int> deletePlat(String nomPlat) async {
+    Database db = await instance.database;
+    return await db.delete(tablePlats, where: '$columnNom = ?', whereArgs: [nomPlat]);
+  }
+
 
   Future<Map<String, dynamic>?> getPlat(String nomPlat) async {
     Database db = await instance.database;
