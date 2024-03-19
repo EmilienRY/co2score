@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'menu.dart';
 import 'scan.dart';
 import 'database.dart';
+import 'package:camera/camera.dart';
 
 void main() async {   //fonction main de l'app
 
@@ -33,7 +34,7 @@ void main() async {   //fonction main de l'app
   };
 
   final plat2={
-    'nom': 'Rougaille Saucisse',
+    'nom': 'rougaille saucisse ',
     'couleur': 'rouge',
     'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert'
   };
@@ -77,86 +78,82 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  //mettre variables réutilisés après ici
-
-  final GlobalKey qrKey= GlobalKey(debugLabel: 'QR');
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
 
-
   @override
-  Widget build(BuildContext context){   //fonction de création de la page, rajouter des choses ici si on veut modif ce à quoi ressemble la page
+  Widget build(BuildContext context) {
     return Scaffold(
-
-        appBar: PreferredSize(     //bar du haut
-          preferredSize: Size.fromHeight(100.0),
-          child: AppBar(
-            backgroundColor: Colors.green,    //changer couleur
-            centerTitle: true,
-            title: const Text('CO2 Score'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.add), //A CHANGER
-                onPressed: () {
-                  controller?.pauseCamera(); // arréter la cam quand on change de page
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => pageMenu()), // passe à la page avec la liste de tout les plats
-                  ).then((value) {
-
-                    controller?.resumeCamera();  // Reprendre la cam quand on va sur cette page
-                  });
-                },
-              ),
-            ],
-          ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100.0),
+        child: AppBar(
+          backgroundColor: Colors.green,
+          centerTitle: true,
+          title: const Text('CO2 Score'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                controller?.pauseCamera();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => pageMenu()),
+                ).then((value) {
+                  controller?.resumeCamera();
+                });
+              },
+            ),
+          ],
         ),
-
-
-      body: Column(
-        children: <Widget> [
-
-          Expanded(
-            flex: 5,
-            child: QRView(key: qrKey, onQRViewCreated: _onQrViewCreated)   //emplacement du scanner QRcode
+      ),
+      body: Stack(
+        children: <Widget>[
+          QRView(
+            key: qrKey,
+            onQRViewCreated: _onQrViewCreated,
           ),
-      ],
-    ),
-
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.red, width: 2),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
-  
-  void _onQrViewCreated(QRViewController controller){   //vonction qui initialize le scanner et passe en écoute
-    this.controller=controller; //récupère la caméra
-    controller.scannedDataStream.listen((scanData) { 
+
+  void _onQrViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
       setState(() {
-        result = scanData;  //stock la valeur du scan dans variable
+        result = scanData;
       });
-      controller.pauseCamera();  // arrète la cam quand un qr code est scané
+      controller.pauseCamera();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PageScan(scan: scanData.code!),  //on va sur la page
-                                          // PageScan et on donne la valeur du scan en paramètre
+          builder: (context) => PageScan(scan: scanData.code!),
         ),
-
-      ).then((_) => controller.resumeCamera()); //on relance la cam quand on revient sur cette page
-
+      ).then((_) => controller.resumeCamera());
     });
   }
 
   @override
-  void reassemble(){
+  void reassemble() {
     super.reassemble();
     controller!.resumeCamera();
-
   }
-  
+
   @override
-  void dispose(){
+  void dispose() {
     controller?.dispose();
     super.dispose();
   }
-  
 }

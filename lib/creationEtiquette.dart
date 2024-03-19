@@ -7,6 +7,9 @@ import 'package:pdf/widgets.dart' as p;
 import 'database.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:typed_data';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:qr/qr.dart';
 
 class GeneratePdfPage extends StatefulWidget {
   @override
@@ -95,9 +98,9 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       throw FileSystemException("Impossible d'accéder au répertoire de téléchargement.");
     }
 
+    final qrImageData = await _generateQrImageData(selectedPlats); // Appel de la fonction _generateQrImageData
 
     final pdf = p.Document();
-    final qrImageData = await _generateQrImageData("Rougaille Saucisse,Rouge;huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert");
 
     pdf.addPage(
       p.Page(
@@ -107,21 +110,21 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
               p.Text("Menu du jour :"),
               for (var i = 0; i < selectedPlats.length; i++)
                 p.Row(
-                  children: [
-                    p.Text(selectedPlats[i]),
-                    p.Container(
-                      width: 20,
-                      height: 20,
-                      decoration: p.BoxDecoration(
-                        shape: p.BoxShape.circle,
-                        color: colors[i],
+                    children: [
+                      p.Text(selectedPlats[i]),
+                      p.Container(
+                        width: 20,
+                        height: 20,
+                        decoration: p.BoxDecoration(
+                          shape: p.BoxShape.circle,
+                          color: colors[i],
+                        ),
                       ),
-                    ),
-                  ]
+                    ]
                 ),
-                p.SizedBox(height: 20),
-                p.Text("détails du menu "),
-                p.Container(
+              p.SizedBox(height: 20),
+              p.Text("détails du menu "),
+              p.Container(
                 width: 100,
                 height: 100,
                 child: p.Image(p.MemoryImage(qrImageData)),
@@ -173,14 +176,41 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     }
   }
 
-  Future<Uint8List> _generateQrImageData(String data) async {
+
+  Future<Uint8List> _generateQrImageData(List<String> selectedPlats) async {
+    final StringBuffer qrDataBuffer = StringBuffer();
+
+    // Construction de la chaîne de données pour le QR code
+    for (int i = 0; i < selectedPlats.length; i++) {
+      final plat = await _getPlatIngredients(selectedPlats[i]);
+      if (plat != null) {
+        // Construction d'une chaîne JSON pour chaque plat
+        final platData = {
+          'nom': plat['nom'],
+          'couleur': plat['couleur'],
+          'ingredients': plat['ingredients'],
+        };
+        final platJson = jsonEncode(platData);
+        qrDataBuffer.write(platJson);
+      }
+    }
+
+    print(qrDataBuffer);
+
+    // Compression des données
+    final compressedData = utf8.encode(qrDataBuffer.toString());
+    final compressedDataLength = compressedData.length;
+    final compressedDataString = base64.encode(compressedData);
+    print(compressedData);
+    // Création du QR code avec les données compressées
     final qrPainter = QrPainter(
-      data: data,
+      data: compressedDataString,
       version: QrVersions.auto,
       gapless: false,
       color: Colors.black,
       emptyColor: Colors.white,
     );
+
     final qrCode = await qrPainter.toImageData(200.0);
     if (qrCode != null) {
       return Uint8List.fromList(qrCode.buffer.asUint8List());
@@ -188,5 +218,15 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       throw Exception("Erreur lors de la génération du QR code");
     }
   }
+
+
+
+
+  Future<Map<String, dynamic>?> _getPlatIngredients(String platName) async {
+    final dbHelper = DatabaseHelper.instance;
+    final plat = await dbHelper.getPlat(platName);
+    return plat;
+  }
+
 
 }

@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.2.5
   open_file: ^3.3.2
   qr_flutter: ^4.1.0
+  camera: ^0.10.5+9
 
 dev_dependencies:
   flutter_test:
