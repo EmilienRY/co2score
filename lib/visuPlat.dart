@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'database.dart'; // Importez la classe Database
+import 'database.dart';
 
 class RecipeIngredient {
   final String name;

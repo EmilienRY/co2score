@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'menu.dart';
 import 'scan.dart';
 import 'database.dart';
-import 'package:camera/camera.dart';
 
 void main() async {   //fonction main de l'app
 
@@ -15,18 +14,11 @@ void main() async {   //fonction main de l'app
     DeviceOrientation.portraitDown,
   ]);
 
-  // Vérifier si la base de données existe
+  //  on verif si la bd existe
   final database = DatabaseHelper.instance;
-  final isDatabaseExists = await database.isDatabaseExists();
+  await database.initializeDatabase();
 
-  // Si la base de données n'existe pas, créer la structure
-  if (!isDatabaseExists) {
-    await database.createDatabase();
-    print('bd bien créé');
-    print('---------------------------------------------------------------------------');
-
-  }
-//plat de test
+  //plat de test A SUPPRIMER PLUS TARD
   final plat1={
     'nom': 'Chili con carne',
     'couleur': 'rouge',
@@ -38,7 +30,6 @@ void main() async {   //fonction main de l'app
     'couleur': 'rouge',
     'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert'
   };
-
 
   try{
     database.insertPlat(plat1);
@@ -83,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
   QRViewController? controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   //page d'acceuil
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.0),
@@ -95,19 +86,19 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                controller?.pauseCamera();
+                controller?.pauseCamera();   // si on appuie sur bouton on met en pause caméra pour pas utiliser ressources pour rien
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => pageMenu()),
+                  MaterialPageRoute(builder: (context) => pageMenu()),  // bouton pour aller vers page de la liste des menu
                 ).then((value) {
-                  controller?.resumeCamera();
+                  controller?.resumeCamera();  // on lance la caméra
                 });
               },
             ),
           ],
         ),
       ),
-      body: Stack(
+      body: Stack(   // lecteur de qr codes
         children: <Widget>[
           QRView(
             key: qrKey,
@@ -118,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Container(
               width: 200,
               height: 200,
-              decoration: BoxDecoration(
+              decoration: BoxDecoration(   // overlay pour voir ou scanner
                 border: Border.all(color: Colors.red, width: 2),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -129,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _onQrViewCreated(QRViewController controller) {
+  void _onQrViewCreated(QRViewController controller) {   // fonction d'écoute
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
@@ -139,21 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PageScan(scan: scanData.code!),
+          builder: (context) => PageScan(scan: scanData.code!),  // si on a scan on va vers page de scan avec les données du qr code
         ),
       ).then((_) => controller.resumeCamera());
     });
   }
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    controller!.resumeCamera();
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
-  }
 }

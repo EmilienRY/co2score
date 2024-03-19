@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-class RecipeIngredient {
+class RecipeIngredient {   // classe des ingrédients
   final String name;
   final Color color;
   RecipeIngredient({required this.name, required this.color});
 }
 
-class Recipe {
+class Recipe {  // classe des recettes   ces 2 classes sont la pour faciliter affichage par la suite
   final String name;
   final Color color;
   final List<RecipeIngredient> ingredients;
@@ -16,7 +16,7 @@ class Recipe {
 }
 
 class PageScan extends StatelessWidget {
-  final String scan;
+  final String scan; // param d'entré
 
   PageScan({required this.scan});
 
@@ -24,9 +24,9 @@ class PageScan extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Recipe> recipes = [];
 
-    try {
+    try {  // on essaye de décoder la donnée scan. ( elle est compressé) . Tout est dans un try catch car si donné pas comme voulue cela va créer une erreur qui serait fatale
 
-      final compressedData = base64.decode(scan);
+      final compressedData = base64.decode(scan);  // décompression
       final decompressedData = utf8.decode(compressedData);
       final List<String> ListePlats = decompressedData.split('}{');
 
@@ -34,7 +34,7 @@ class PageScan extends StatelessWidget {
         ListePlats[i] = ListePlats[i].replaceAll(RegExp(r'[{}]+'), '');
       }
 
-      for (final recette in ListePlats) {
+      for (final recette in ListePlats) {  // traitements des strings de chaques plats
         String jsonString = '{' + recette + '}';
         Map<String, dynamic> plat = jsonDecode(jsonString);
 
@@ -58,11 +58,11 @@ class PageScan extends StatelessWidget {
         recipes.add(Recipe(name: name, color: color, ingredients: ingredients));
       }
 
-      return Scaffold(
+      return Scaffold( // affichage des recettes
         appBar: AppBar(
           title: Text('Plats du menu'),
         ),
-        body: ListView.builder(
+        body: ListView.builder(   // affichage de la liste des ingredients + couleurs  pour chaques plats
           itemCount: recipes.length,
           itemBuilder: (context, index) {
             return Column(
@@ -114,7 +114,8 @@ class PageScan extends StatelessWidget {
           },
         ),
       );
-    } catch (e) {
+    }
+    catch (e) {  // si on a une erreur lorsqu'on traite les données => le qr code scanné n'est pas valide ou il y a eu un problème de lecture du qr code et il faut le re scan
       return Scaffold(
         appBar: AppBar(
           title: Text('Erreur de format'),
@@ -126,7 +127,7 @@ class PageScan extends StatelessWidget {
     }
   }
 
-  Color _parseColor(String colorString) {
+  Color _parseColor(String colorString) {  // fonction pour recup les couleurs
     switch (colorString.toLowerCase()) {
       case 'rouge':
         return Colors.red;
