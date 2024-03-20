@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'database.dart';
 
 class pageCreation extends StatefulWidget {
   @override
@@ -8,23 +8,11 @@ class pageCreation extends StatefulWidget {
 
 class _MyPageState extends State<pageCreation> {
   final TextEditingController _controllerNomPlat = TextEditingController();
-  //TextEditingController _controllerIngredient = TextEditingController();
 
-/*    final  TextField ingredient=TextField(
-    decoration: InputDecoration(
-      border: OutlineInputBorder(),
-      labelText: 'Ingrédient',
-    ),
-  );*/
 
   final List <TextField> ListIngredient=[];
   Widget build(BuildContext context) {
- /*   void _ajoutIngredient(){
-      setState(() {
-        ListIngredient.add(ingredient);
-        const SizedBox(height: 10);
-      });
-      }*/
+
       void _supIngredient(){
       setState(() {
         ListIngredient.remove(ListIngredient.last);
@@ -88,6 +76,13 @@ class _MyPageState extends State<pageCreation> {
               String ingredients="";
               for (TextField Ingredient in ListIngredient) {
                 String ingredient = Ingredient.controller!.text;
+                final database = DatabaseHelper.instance;
+                database.getIngredient(ingredient).then((ingr){
+                  if (ingr != null) {
+                    final val = ingr['valeur'];
+                    ingredients = ingredients + ingredient + ',Vert;';
+                  }
+                });
                 print('Text saisi: $ingredient');
                 ingredients=ingredients+ingredient+',Vert;';
               }

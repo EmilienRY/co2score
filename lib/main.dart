@@ -34,8 +34,12 @@ void main() async {   //fonction main de l'app
   try{
     database.insertPlat(plat1);
     database.insertPlat(plat2);
+    print("------------------------------");
+    print("insert reussi");
+
   }
   catch(e){
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     print('erreur lors insertion');
   }
 

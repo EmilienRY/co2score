@@ -10,7 +10,9 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
   static final _databaseVersion = 1;
 
   // nom des tables et colonnes
-  static final tablePlats = 'plat';
+  static final tablePlats = 'platt';
+  static final tableIngr = 'ingredient';
+  static final columnValeur = 'valeur';
   static final columnNom = 'nom';
   static final columnCouleur = 'couleur';
   static final columnIngredients = 'ingredients';
@@ -31,13 +33,13 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
       ByteData data = await rootBundle.load(join("assets", _databaseName));
       List<int> bytes =
       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      print("bd créée");
       await File(path).writeAsBytes(bytes);
     }
     else {
       print("bd exite déjà");   // si jamais existe déjà
     }
   }
-
 
 
     static Database? _database;  // db qu'on utilise dans les fonctions
@@ -66,7 +68,8 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
 
   Future<List<Map<String, dynamic>>> queryAllPlats() async {   // pour recup tout les plats de la bd
     Database db = await instance.database;
-    return await db.query(tablePlats);
+    final plats=await db.query(tablePlats);
+    return plats;
   }
 
   Future<int> deletePlat(String nomPlat) async {   // supp du plat
@@ -90,6 +93,29 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
   }
 
   // ---------------------- opérations sur les ingrédients -------------------------------
+
+  Future<List<Map<String, dynamic>>> queryAllIngredients() async {   // pour recup tout les plats de la bd
+    Database db = await instance.database;
+    final ingrs=await db.query(tableIngr);
+    print(ingrs);
+    return ingrs;
+  }
+
+
+  Future<Map<String, dynamic>?> getIngredient(String nomIngr) async {   // recup de l'ingredient avec son nom
+    Database db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query(
+      tableIngr,
+      where: '$columnNom = ?',
+      whereArgs: [nomIngr],
+    );
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null; // Retourner null si aucun ingredient avec ce nom n'est trouvé
+    }
+  }
+
 
 
 }
