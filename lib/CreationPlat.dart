@@ -8,6 +8,7 @@ class pageCreation extends StatefulWidget {
 
 class _MyPageState extends State<pageCreation> {
   final TextEditingController _controllerNomPlat = TextEditingController();
+  final TextEditingController _controllerPrix = TextEditingController();
 
 
   final List <TextField> ListIngredient=[];
@@ -34,7 +35,16 @@ class _MyPageState extends State<pageCreation> {
           border: OutlineInputBorder(),
           labelText: 'Nom du plat',
         ),
-      ),],
+      ),
+          const SizedBox(height: 30),
+          TextField(
+            controller: _controllerPrix,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Prix du plat',
+            ),
+          ),
+        ],
       ),
       Column(children: ListIngredient),
       Column(
@@ -73,6 +83,10 @@ class _MyPageState extends State<pageCreation> {
               // Afficher la chaîne de caractères dans la console
               print('Le texte saisi est : $nomPlat');
               _controllerNomPlat.dispose();
+              String prixPlat = _controllerPrix.text;
+              // Afficher la chaîne de caractères dans la console
+              print('Le texte saisi est : $prixPlat');
+              _controllerPrix.dispose();
               String ingredients="";
               for (TextField Ingredient in ListIngredient) {
                 String ingredient = Ingredient.controller!.text;
