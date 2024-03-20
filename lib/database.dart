@@ -112,9 +112,24 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
     );
     if (result.isNotEmpty) {
       return result.first;
-    } else {
+    }
+    else {
       return null; // Retourner null si aucun ingredient avec ce nom n'est trouvé
     }
+  }
+
+
+  Future<List<String>> getSimilarIngredients(String partialIngredient) async {
+    final Database db = await instance.database;
+
+    // Utiliser une requête SQL LIKE pour rechercher les ingrédients similaires
+    final List<Map<String, dynamic>> ingredients = await db.rawQuery(
+      'SELECT $columnNom FROM $tableIngr WHERE $columnNom LIKE ?',
+      ['%$partialIngredient%'],
+    );
+
+    // Récupérer les noms des ingrédients à partir du résultat de la requête
+    return List<String>.generate(ingredients.length, (int index) => ingredients[index][columnNom]);
   }
 
 

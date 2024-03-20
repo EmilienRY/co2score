@@ -19,7 +19,7 @@ void main() async {   //fonction main de l'app
   await database.initializeDatabase();
 
   //plat de test A SUPPRIMER PLUS TARD
-  final plat1={
+  /*final plat1={
     'nom': 'Chili con carne',
     'couleur': 'rouge',
     'ingredients': 'Boeuf haché,Rouge;maïs,Vert;Oignons,Vert;Haricot rouge,Vert;Tomate,Vert',
@@ -43,7 +43,7 @@ void main() async {   //fonction main de l'app
   catch(e){
     print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     print('erreur lors insertion');
-  }
+  }*/
 
 
   runApp(const MyApp());  //lance l'application

@@ -160,8 +160,8 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
               p.SizedBox(height: 20), // Ajout d'un espace vertical entre chaque plat
               p.Text("Détails du menu :"),   //qrcode
               p.Container(
-                width: 150,
-                height: 150,
+                width: 100,
+                height: 100,
                 child: p.Image(p.MemoryImage(qrImageData)),
               ),
             ],
@@ -239,6 +239,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         qrDataBuffer.write(platJson);
       }
     }
+    print(qrDataBuffer.toString());
 
     final compressedData = utf8.encode(qrDataBuffer.toString());  // on compresse les donne (si on ne le fait pas le qrcode généré peut le pas être lisible)
     final compressedDataString = base64.encode(compressedData);
