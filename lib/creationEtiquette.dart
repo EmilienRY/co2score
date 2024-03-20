@@ -9,6 +9,14 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:typed_data';
 import 'dart:convert';
 
+class PlatInfo {
+  final String nom;
+  final PdfColor couleur;
+  final String prix;
+
+  PlatInfo(this.nom, this.couleur, this.prix);
+}
+
 
 class GeneratePdfPage extends StatefulWidget {
   @override
@@ -16,7 +24,7 @@ class GeneratePdfPage extends StatefulWidget {
 }
 
 class _GeneratePdfPageState extends State<GeneratePdfPage> {
-  List<String> selectedPlats = [];
+  List<PlatInfo> selectedPlats = [];
   List<Future<PdfColor>> couleursPlats = [];   // liste de couleurs pour pdf
   List<String> plats = [];
 
@@ -54,21 +62,21 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                 'Choisissez les plats à inclure dans le PDF :',
               ),
               Expanded(
-                child: ListView.builder(   // liste des plats à cocher
+                child: ListView.builder(
                   itemCount: plats.length,
                   itemBuilder: (BuildContext context, int index) {
                     final plat = plats[index];
                     return CheckboxListTile(
                       title: Text(plat),
-                      value: selectedPlats.contains(plat),
-                      onChanged: (bool? value) {
+                      value: selectedPlats.any((element) => element.nom == plat),
+                      onChanged: (bool? value){
                         setState(() {
-                          if (value != null && value) {   //si on coche on rajoute a selectedPlats et couleursPlats
-                            selectedPlats.add(plat);
-                            couleursPlats.add(_getPlatColor(plat));  // on recup la couleur du plat avec fonction _getPlatColor
+                          if (value != null && value) {
+                            addPlat(plat);
+                            //selectedPlats.add(PlatInfo(plat, await _getPlatColor(plat), await _getPlatPrice(plat)));
                           } else {
-                            selectedPlats.remove(plat); //si on décoche on enlève
-                            couleursPlats.remove(_getPlatColor(plat));
+                            removePlat(plat);
+                            //selectedPlats.removeWhere((element) => element.nom == plat);
                           }
                         });
                       },
@@ -90,7 +98,26 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     );
   }
 
-  Future<String> makePdf(List<String> selectedPlats) async {  //fonction de génération et ouverture pdf
+
+  // Définir une fonction asynchrone pour ajouter un plat à selectedPlats
+  Future<void> addPlat(String plat) async {
+    var couleur = await _getPlatColor(plat);
+    var prix = await _getPlatPrice(plat);
+    setState(() {
+      selectedPlats.add(PlatInfo(plat, couleur, prix));
+    });
+  }
+
+// Définir une fonction pour retirer un plat de selectedPlats
+  void removePlat(String plat) {
+    setState(() {
+      selectedPlats.removeWhere((element) => element.nom == plat);
+    });
+  }
+
+
+
+  Future<String> makePdf(List<PlatInfo> selectedPlats) async {  //fonction de génération et ouverture pdf
     Directory? downloadsDirectory = await getDownloadsDirectory();
     List<PdfColor> colors = await Future.wait(couleursPlats);   //on recup les couleurs des plats selectionnés
 
@@ -107,26 +134,34 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         build: (context) {
           return p.Column(
             children: [
-              p.Text("Menu du jour :"),
-              for (var i = 0; i < selectedPlats.length; i++)
-                p.Row(
+              p.Text("Menu du jour :", style: p.TextStyle(fontSize: 20, fontWeight: p.FontWeight.bold)), // Titre avec une police plus grosse
+              p.SizedBox(width: 35),
+              for (var platInfo in selectedPlats)
+                p.Container(
+                  padding: const p.EdgeInsets.symmetric(vertical: 8), // Ajout d'un espace vertical entre chaque plat
+                  child: p.Row(
+                    crossAxisAlignment: p.CrossAxisAlignment.start,
                     children: [
-                      p.Text(selectedPlats[i]),  //nom du plat
+                      p.Text("${platInfo.nom}", style: p.TextStyle(fontSize: 30, fontWeight: p.FontWeight.bold)), // Nom du plat avec une police plus grosse
+                      p.SizedBox(width: 10), // Ajout d'un espace horizontal entre le nom du plat et le prix
+                      p.Text("${platInfo.prix}", style: p.TextStyle(fontSize: 25)), // Prix du plat
+                      p.SizedBox(width: 15), // Ajout d'un espace horizontal entre le prix et la couleur
                       p.Container(
-                        width: 20,
-                        height: 20,
+                        width: 40,
+                        height: 40,
                         decoration: p.BoxDecoration(
                           shape: p.BoxShape.circle,
-                          color: colors[i],    // pastille de couleur du plat
+                          color: platInfo.couleur,    // pastille de couleur du plat
                         ),
                       ),
-                    ]
+                    ],
+                  ),
                 ),
-              p.SizedBox(height: 20),
-              p.Text("détails du menu "),   //qrcode
+              p.SizedBox(height: 20), // Ajout d'un espace vertical entre chaque plat
+              p.Text("Détails du menu :"),   //qrcode
               p.Container(
-                width: 100,
-                height: 100,
+                width: 150,
+                height: 150,
                 child: p.Image(p.MemoryImage(qrImageData)),
               ),
             ],
@@ -169,6 +204,16 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     return PdfColor.fromHex('#808080');  // si problème pour trouver couleur met du gris
   }
 
+  Future<String> _getPlatPrice(String platName) async {
+    final dbHelper = DatabaseHelper.instance;
+    final plat = await dbHelper.getPlat(platName);
+    if (plat != null) {
+      return plat['prix'] as String;
+    }
+    return '';
+  }
+
+
   void ouverturePDF(String path) async {  // pour ouvrir le pdf avec appli extérieur
     try {
       await OpenFile.open(path);
@@ -178,12 +223,12 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   }
 
 
-  Future<Uint8List> _generateQrImageData(List<String> selectedPlats) async {  // génération du qrcode à partir de la liste des plats selctionnés
+  Future<Uint8List> _generateQrImageData(List<PlatInfo> selectedPlats) async {  // génération du qrcode à partir de la liste des plats selctionnés
     final StringBuffer qrDataBuffer = StringBuffer();
 
     // Construction de la chaîne pour le QR code
     for (int i = 0; i < selectedPlats.length; i++) {
-      final plat = await _getPlatIngredients(selectedPlats[i]);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
+      final plat = await _getPlatIngredients(selectedPlats[i].nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
       if (plat != null) {
         final platData = {
           'nom': plat['nom'],

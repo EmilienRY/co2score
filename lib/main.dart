@@ -22,13 +22,15 @@ void main() async {   //fonction main de l'app
   final plat1={
     'nom': 'Chili con carne',
     'couleur': 'rouge',
-    'ingredients': 'Boeuf haché,Rouge;maïs,Vert;Oignons,Vert;Haricot rouge,Vert;Tomate,Vert'
+    'ingredients': 'Boeuf haché,Rouge;maïs,Vert;Oignons,Vert;Haricot rouge,Vert;Tomate,Vert',
+    'prix':'1,5'
   };
 
   final plat2={
     'nom': 'rougaille saucisse ',
     'couleur': 'rouge',
-    'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert'
+    'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert',
+    'prix':'2,5'
   };
 
   try{

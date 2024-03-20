@@ -10,9 +10,10 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
   static final _databaseVersion = 1;
 
   // nom des tables et colonnes
-  static final tablePlats = 'platt';
+  static final tablePlats = 'plat';
   static final tableIngr = 'ingredient';
   static final columnValeur = 'valeur';
+  static final columnPrix = 'prix';
   static final columnNom = 'nom';
   static final columnCouleur = 'couleur';
   static final columnIngredients = 'ingredients';
