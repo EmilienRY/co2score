@@ -119,7 +119,6 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
 
   Future<String> makePdf(List<PlatInfo> selectedPlats) async {  //fonction de génération et ouverture pdf
     Directory? downloadsDirectory = await getDownloadsDirectory();
-    List<PdfColor> colors = await Future.wait(couleursPlats);   //on recup les couleurs des plats selectionnés
 
     if (downloadsDirectory == null) {
       throw FileSystemException("Impossible d'accéder au répertoire de téléchargement.");
@@ -159,10 +158,11 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                 ),
               p.SizedBox(height: 20), // Ajout d'un espace vertical entre chaque plat
               p.Text("Détails du menu :"),   //qrcode
+
               p.Container(
-                width: 100,
-                height: 100,
-                child: p.Image(p.MemoryImage(qrImageData)),
+                    width: 100,
+                    height: 100,
+                    child: p.Image(p.MemoryImage(qrImageData)),
               ),
             ],
           );
@@ -248,12 +248,10 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     final qrPainter = QrPainter(        // Création du QR code avec les données compressées
     data: compressedDataString,
       version: QrVersions.auto,
-      gapless: false,
-      color: Colors.black,     // deprecated mais fonctionne bien
-      emptyColor: Colors.white,
+      gapless: true,
     );
 
-    final qrCode = await qrPainter.toImageData(200.0);
+    final qrCode = await qrPainter.toImageData(1200.0);
     if (qrCode != null) {
       return Uint8List.fromList(qrCode.buffer.asUint8List());  // on retourne le qrcode
     } else {
