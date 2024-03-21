@@ -95,7 +95,7 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
 
   // ---------------------- opérations sur les ingrédients -------------------------------
 
-  Future<List<Map<String, dynamic>>> queryAllIngredients() async {   // pour recup tout les plats de la bd
+  Future<List<Map<String, dynamic>>> queryAllIngredients() async {   // pour recup tout les plats de la bd ( pas utilisé pour l'instant mais peut être plus tard)
     Database db = await instance.database;
     final ingrs=await db.query(tableIngr);
     print(ingrs);
@@ -114,22 +114,20 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
       return result.first;
     }
     else {
-      return null; // Retourner null si aucun ingredient avec ce nom n'est trouvé
+      return null; //  null si aucun ingredient avec ce nom est trouvé
     }
   }
 
 
-  Future<List<String>> getSimilarIngredients(String partialIngredient) async {
+  Future<List<String>> getSimilarIngredients(String partialIngredient) async { // fonction utile dans la création du plat pour proposer à l'user les ingrédients similaire a ce qu'il écrit
     final Database db = await instance.database;
 
-    // Utiliser une requête SQL LIKE pour rechercher les ingrédients similaires
+
     final List<Map<String, dynamic>> ingredients = await db.rawQuery(
-      'SELECT $columnNom FROM $tableIngr WHERE $columnNom LIKE ?',
+      'SELECT $columnNom FROM $tableIngr WHERE $columnNom LIKE ?',    // on utilise une requète LIKE pour recup les similaires
       ['%$partialIngredient%'],
     );
-
-    // Récupérer les noms des ingrédients à partir du résultat de la requête
-    return List<String>.generate(ingredients.length, (int index) => ingredients[index][columnNom]);
+    return List<String>.generate(ingredients.length, (int index) => ingredients[index][columnNom]); // on recup les ingrédients sous forme de liste de string
   }
 
 

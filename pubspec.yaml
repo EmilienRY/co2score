@@ -71,8 +71,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/plat.csv
-    - assets/donne.csv
     - assets/donne.db
 
 

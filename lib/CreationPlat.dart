@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'menu.dart';
+
 class IngredientRow {
   TextEditingController controllerIngredient = TextEditingController();
   TextEditingController controllerQuantity = TextEditingController();
@@ -63,8 +64,8 @@ class _MyPageState extends State<pageCreation> {
                           },
                           onSelected: (String selectedIngredient) {
                             setState(() {
-                              // Mettre à jour le texte de l'ingrédient dans la ligne en cours
-                              ListIngredient[index].controllerIngredient.text = selectedIngredient;
+                              ListIngredient[index].controllerIngredient.text = selectedIngredient;   // Mettre à jour le texte de l'ingrédient dans la ligne en cours
+
                             });
                           },
                           fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -143,8 +144,8 @@ class _MyPageState extends State<pageCreation> {
                     row.controllerIngredient.text.isEmpty ||
                         row.controllerQuantity.text.isEmpty);
 
-                // Vérifier si le nom du plat existe déjà dans la base de données
-                bool platExists = await DatabaseHelper.instance.getPlat(_controllerNomPlat.text) != null;
+                bool platExists = await DatabaseHelper.instance.getPlat(_controllerNomPlat.text) != null;  // verif si le nom du plat existe déjà dans la base de données
+
 
                 // Afficher un avertissement si au moins un champ est vide
                 if (fieldsEmpty) {
@@ -188,7 +189,6 @@ class _MyPageState extends State<pageCreation> {
                 } else {
                   // Tous les champs sont remplis et le nom du plat n'existe pas dans la base de données
 
-                  // Construire la liste des ingrédients au format requis
                   List<String> ingredientsList = [];
                   double finalCO2=0;
                   double quantitePlat=0;
@@ -197,23 +197,24 @@ class _MyPageState extends State<pageCreation> {
                     double? quantity = double.tryParse(row.controllerQuantity.text.replaceAll(',', '.'));
 
                     if (quantity != null) {
-                      // Récupérer la valeur de l'ingrédient depuis la base de données
+
                       Map<String, dynamic>? ingredientData = await DatabaseHelper.instance.getIngredient(ingredient);
                       if (ingredientData != null) {
-                        double? value = double.tryParse(ingredientData['valeur'].replaceAll(',', '.'));
+                        double? value = double.tryParse(ingredientData['valeur'].replaceAll(',', '.'));  // on transforme la valeur en double pour pouvoir faire calculs
                         if(value == null){
-                          ingredientsList.add('$ingredient,rouge');
+                          ingredientsList.add('$ingredient,noir');  // on met couleur noir si il y a eu une erreur pour signifier qu'il y a eu un problème
                         }
-                        else{
-                          double GparKG=value*1000;
-                          double GparG=GparKG/10;
-                          double totalCO2 = quantity * (GparG/100);
-                          quantitePlat+=quantity;
-                          finalCO2+=totalCO2;
+                        else{  // partie pour choisir la couleur de chaques ingrédients
+                          double GparKG=value*1000;  // dans la BD la valeur est en KG de CO2 pour 1 KG de produit , on convertit en gramme de CO2 pour 1 kg de produit
+                          double GparG=GparKG/10;  //  on ramène ça à gramme de CO2 pour 100 g de produit
+                          double totalCO2 = quantity * (GparG/100);  // quantiré de CO2 émise par la quantité de produit mis dans le plat
+                          quantitePlat+=quantity;  // on ajoute le masse de produit dans le total du plat
+                          finalCO2+=totalCO2; // on ajoute l'émission de l'ingrédient au total d'émission du plat
 
                           String color;
 
-                          // Déterminer la couleur en fonction du total de CO2
+
+                          // on détermine la couleur de l'ingrédient en fonction de l'émission de 100 g de produit
                           if (GparG < 150) {
                             color = 'Vert';
                           } else if (GparG > 450) {
@@ -233,38 +234,37 @@ class _MyPageState extends State<pageCreation> {
                     }
                   }
 
-                  // Convertir la liste en une seule chaîne séparée par des points-virgules
-                  String ingredients = ingredientsList.join(';');
+                  String ingredients = ingredientsList.join(';'); // on fait un string à partir de la liste d'ingrédients
 
-                  String couleurPlat;
+                  String couleurPlat;   //param pour la couleur que le plat aura
 
-                  double CO2pour100=(finalCO2/quantitePlat)*100;
+                  double CO2pour100=(finalCO2/quantitePlat)*100;  // calcul de la quantité de CO2 émis pour 100g de plat.
 
-                  if (CO2pour100 < 150) {
+                  if (CO2pour100 < 150) {   //si < à 150 le plat est vert
                     couleurPlat = 'Vert';
-                  } else if (CO2pour100 > 450) {
+                  } else if (CO2pour100 > 450) {  //si > à 450 le plat est rouge
                     couleurPlat = 'Rouge';
                   } else {
-                    couleurPlat = 'Jaune';
+                    couleurPlat = 'Jaune';  // sinon c'est qu'il est jaune
                   }
 
 
                   // Créer le plat avec les données formatées
                   final plat = {
-                    'nom': _controllerNomPlat.text,
-                    'couleur': couleurPlat, // Couleur choisie au hasard pour l'exemple
+                    'nom': _controllerNomPlat.text,  // recup depuis le textfield du nom
+                    'couleur': couleurPlat,
                     'ingredients': ingredients,
-                    'prix': _controllerPrix.text,
+                    'prix': _controllerPrix.text, // recup depuis le textfield du prix
                   };
 
                   try {
                     await DatabaseHelper.instance.insertPlat(plat); // Enregistrer le plat dans la base de données
                     print("Insertion réussie");
 
-                    // Retourner à la page du menu
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => pageMenu()), // Remplacer la page actuelle par la page du menu
+                    Navigator.pushReplacement(  // Retourner à la page du menu une fois sauvegarder
+
+                    context,
+                      MaterialPageRoute(builder: (context) => pageMenu()),
                     );
 
                   } catch (e) {

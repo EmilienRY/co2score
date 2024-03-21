@@ -204,7 +204,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     return PdfColor.fromHex('#808080');  // si problème pour trouver couleur met du gris
   }
 
-  Future<String> _getPlatPrice(String platName) async {
+  Future<String> _getPlatPrice(String platName) async { // pour recup le prix du plat
     final dbHelper = DatabaseHelper.instance;
     final plat = await dbHelper.getPlat(platName);
     if (plat != null) {
@@ -226,8 +226,8 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   Future<Uint8List> _generateQrImageData(List<PlatInfo> selectedPlats) async {  // génération du qrcode à partir de la liste des plats selctionnés
     final StringBuffer qrDataBuffer = StringBuffer();
 
-    // Construction de la chaîne pour le QR code
-    for (int i = 0; i < selectedPlats.length; i++) {
+
+    for (int i = 0; i < selectedPlats.length; i++) {  // on fait la chaine pour le qr code
       final plat = await _getPlatIngredients(selectedPlats[i].nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
       if (plat != null) {
         final platData = {
@@ -239,11 +239,9 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         qrDataBuffer.write(platJson);
       }
     }
-    print(qrDataBuffer.toString());
 
     final compressedData = utf8.encode(qrDataBuffer.toString());  // on compresse les donne (si on ne le fait pas le qrcode généré peut le pas être lisible)
     final compressedDataString = base64.encode(compressedData);
-    print(compressedData);
 
     final qrPainter = QrPainter(        // Création du QR code avec les données compressées
     data: compressedDataString,
@@ -251,7 +249,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       gapless: true,
     );
 
-    final qrCode = await qrPainter.toImageData(1200.0);
+    final qrCode = await qrPainter.toImageData(1200.0); // on donne une grande taille pour éviter bug qui coupe le qr code à la génération
     if (qrCode != null) {
       return Uint8List.fromList(qrCode.buffer.asUint8List());  // on retourne le qrcode
     } else {

@@ -8,26 +8,26 @@ class RecipeIngredient {
   RecipeIngredient({required this.name, this.color});
 }
 
-class pageVisu extends StatelessWidget {
+class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on ait cliqué dessus
   final String recette;
 
-  pageVisu({required this.recette});
+  pageVisu({required this.recette}); // plat selectionné
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
-      future: _getRecipeDetails(),
+      future: _getRecipeDetails(),  // appel de la fonc pour recup les infos du plat
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting) { // si met du temps avant d'avoir les infos du plat on met une icone de chargement
           return CircularProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text('Erreur de chargement des détails de la recette');
+          return Text('Erreur de chargement des détails de la recette'); // si erreur lors de recup des infos
         } else {
           final Map<String, dynamic> recetteDetail = snapshot.data!;
-          if (recetteDetail.isEmpty) {
+          if (recetteDetail.isEmpty) {  // si erreur et que le plat select n'existe pas dans la BD
             return Text('Recette non trouvée dans la base de données');
           } else {
-            String recetteString = recetteDetail['ingredients'];
+            String recetteString = recetteDetail['ingredients'];  // formatage des donne du plat pour les afficheer
             List<String> recipes = recetteString.split(';');
             List<RecipeIngredient> ingredients = [];
 
@@ -35,14 +35,14 @@ class pageVisu extends StatelessWidget {
               List<String> recipeDetails = recipe.split(',');
               if (recipeDetails.length >= 2) {
                 String name = recipeDetails[0];
-                Color? color = _parseColor(recipeDetails[1]);
+                Color? color = _parseColor(recipeDetails[1]); // appel de la fonction qui apartir d'un string renvoie sa couleur
                 ingredients.add(RecipeIngredient(name: name, color: color));
               } else {
                 print('Erreur : Les détails de la recette ne sont pas complets.');
               }
             });
 
-            return Scaffold(
+            return Scaffold( // mise en forme de la page
               appBar: AppBar(
                 title: Text(ingredients.isNotEmpty ? recetteDetail['nom'] : 'Aucune recette'),
               ),
@@ -95,7 +95,7 @@ class pageVisu extends StatelessWidget {
     );
   }
 
-  Future<Map<String, dynamic>> _getRecipeDetails() async {
+  Future<Map<String, dynamic>> _getRecipeDetails() async {  // pour recup détail du plat selectionné au début
     try {
       // Récupérer les détails de la recette depuis la base de données
       return await DatabaseHelper.instance.getPlat(recette) ?? {};

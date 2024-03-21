@@ -18,7 +18,7 @@ class _pageMenuState extends State<pageMenu> {
     _loadData();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData() async { // pour charger les plats depuis BD
     try {
       final plats = await DatabaseHelper.instance.queryAllPlats();
       setState(() {
@@ -30,7 +30,7 @@ class _pageMenuState extends State<pageMenu> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  // mise en forme du menu
     return Scaffold(
       appBar: AppBar(
         title: Text('page des menus'),
@@ -71,7 +71,7 @@ class _pageMenuState extends State<pageMenu> {
                   children: [
                     SizedBox(height: 20),
                     Text(
-                      'Contenu sous le bouton',
+                      'Liste des plats',
                       style: TextStyle(fontSize: 18),
                     ),
                     if (buttonTexts.isNotEmpty)
@@ -97,7 +97,8 @@ class _pageMenuState extends State<pageMenu> {
                         ).toList(),
                       ),
                     if (buttonTexts.isEmpty)
-                      CircularProgressIndicator(),
+                      Text(
+                        'ajoutez des plats pour les voir apparaitre ici', style: TextStyle(fontSize: 18),),
                   ],
                 ),
               ),
@@ -108,7 +109,7 @@ class _pageMenuState extends State<pageMenu> {
     );
   }
 
-  void _deletePlat(String nomPlat) async {
+  void _deletePlat(String nomPlat) async { // supp le plat de la BD
     try {
       await DatabaseHelper.instance.deletePlat(nomPlat);
       _loadData();
