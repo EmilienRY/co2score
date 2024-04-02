@@ -11,7 +11,7 @@ import 'dart:convert';
 
 class PlatInfo {
   final String nom;
-  final PdfColor couleur;
+  final Color couleur;
   final String prix;
 
   PlatInfo(this.nom, this.couleur, this.prix);
@@ -125,6 +125,12 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     }
 
     final qrImageData = await _generateQrImageData(selectedPlats); // Appel de la fonction _generateQrImageData pour faire le qrcode
+    final Map<String, Uint8List> platQR = {};
+
+    for (final plat in selectedPlats){
+      platQR[plat.nom] = await _generateQrUnique(plat, plat.couleur);
+
+    }
 
     final pdf = p.Document();  //création du pdf
 
@@ -146,12 +152,13 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                       p.Text("${platInfo.prix}", style: p.TextStyle(fontSize: 25)), // Prix du plat
                       p.SizedBox(width: 15), // Ajout d'un espace horizontal entre le prix et la couleur
                       p.Container(
-                        width: 40,
-                        height: 40,
-                        decoration: p.BoxDecoration(
-                          shape: p.BoxShape.circle,
-                          color: platInfo.couleur,    // pastille de couleur du plat
-                        ),
+                        width: 100,
+                        height: 100,
+                        child: p.Image(
+                            p.MemoryImage(
+                                platQR[platInfo.nom]!
+                        )
+                      ),
                       ),
                     ],
                   ),
@@ -178,20 +185,20 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   }
 
 
-  Future<PdfColor?> _parseColor(String colorString) async {   // on recup couleurs (type PdfColor pour mettre dans pdf)
+  Future<Color?> _parseColor(String colorString) async {   // on recup couleurs (type PdfColor pour mettre dans pdf)
     switch (colorString.toLowerCase().replaceAll(' ', '')) {
       case 'rouge':
-        return PdfColor.fromHex('#FF0000');
+        return Colors.red;
       case 'vert':
-        return PdfColor.fromHex('#008000');
+        return Colors.green;
       case 'jaune':
-        return PdfColor.fromHex('#FFFF00');
+        return Color.fromRGBO(255, 204, 0, 1);
       default:
         return null;
     }
   }
 
-  Future<PdfColor> _getPlatColor(String platName) async {  // fonction pour recup couleur du plat dans base de donnée
+  Future<Color> _getPlatColor(String platName) async {  // fonction pour recup couleur du plat dans base de donnée
     final dbHelper = DatabaseHelper.instance;
     final plat = await dbHelper.getPlat(platName);
     if (plat != null) {
@@ -201,7 +208,8 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         return color;
       }
     }
-    return PdfColor.fromHex('#808080');  // si problème pour trouver couleur met du gris
+
+    return Colors.black;  // si problème pour trouver couleur met du gris
   }
 
   Future<String> _getPlatPrice(String platName) async { // pour recup le prix du plat
@@ -244,9 +252,11 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     final compressedDataString = base64.encode(compressedData);
 
     final qrPainter = QrPainter(        // Création du QR code avec les données compressées
+
     data: compressedDataString,
       version: QrVersions.auto,
       gapless: true,
+      color: Colors.black,
     );
 
     final qrCode = await qrPainter.toImageData(1200.0); // on donne une grande taille pour éviter bug qui coupe le qr code à la génération
@@ -256,6 +266,51 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       throw Exception("Erreur lors de la génération du QR code");
     }
   }
+
+
+
+
+  Future<Uint8List> _generateQrUnique(PlatInfo selectedPlat,Color couleur) async {  // génération d'un qrcode de couleur'
+    final StringBuffer qrDataBuffer = StringBuffer();
+
+
+      final plat = await _getPlatIngredients(selectedPlat.nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
+      if (plat != null) {
+        final platData = {
+          'nom': plat['nom'],
+          'couleur': plat['couleur'],
+          'ingredients': plat['ingredients'],
+        };
+        final platJson = jsonEncode(platData);  //on fait chaine au format json pour plus de lisibilité
+        qrDataBuffer.write(platJson);
+      }
+
+
+    final compressedData = utf8.encode(qrDataBuffer.toString());  // on compresse les donne (si on ne le fait pas le qrcode généré peut le pas être lisible)
+    final compressedDataString = base64.encode(compressedData);
+
+    final qrPainter = QrPainter(        // Création du QR code avec les données compressées
+
+      data: compressedDataString,
+      version: QrVersions.auto,
+      gapless: true,
+      color: couleur,
+    );
+
+    final qrCode = await qrPainter.toImageData(1200.0); // on donne une grande taille pour éviter bug qui coupe le qr code à la génération
+    if (qrCode != null) {
+      return Uint8List.fromList(qrCode.buffer.asUint8List());  // on retourne le qrcode
+    } else {
+      throw Exception("Erreur lors de la génération du QR code");
+    }
+  }
+
+
+
+
+
+
+
 
 
   Future<Map<String, dynamic>?> _getPlatIngredients(String platName) async {  // recup les infos du plat depuis bd

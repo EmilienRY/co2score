@@ -195,12 +195,11 @@ class _MyPageState extends State<pageCreation> {
                   for (IngredientRow row in ListIngredient) {
                     String ingredient = row.controllerIngredient.text;
                     double? quantity = double.tryParse(row.controllerQuantity.text.replaceAll(',', '.'));
-
                     if (quantity != null) {
 
                       Map<String, dynamic>? ingredientData = await DatabaseHelper.instance.getIngredient(ingredient);
                       if (ingredientData != null) {
-                        double? value = double.tryParse(ingredientData['valeur'].replaceAll(',', '.'));  // on transforme la valeur en double pour pouvoir faire calculs
+                        double? value = ingredientData['valeur'];
                         if(value == null){
                           ingredientsList.add('$ingredient,noir');  // on met couleur noir si il y a eu une erreur pour signifier qu'il y a eu un problème
                         }

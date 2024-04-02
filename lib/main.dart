@@ -18,32 +18,7 @@ void main() async {   //fonction main de l'app
   final database = DatabaseHelper.instance;
   await database.initializeDatabase();
 
-  //plat de test A SUPPRIMER PLUS TARD
-  /*final plat1={
-    'nom': 'Chili con carne',
-    'couleur': 'rouge',
-    'ingredients': 'Boeuf haché,Rouge;maïs,Vert;Oignons,Vert;Haricot rouge,Vert;Tomate,Vert',
-    'prix':'1,5'
-  };
 
-  final plat2={
-    'nom': 'rougaille saucisse ',
-    'couleur': 'rouge',
-    'ingredients': 'huile olive,Vert;curcuma,Rouge;sel,vert;poivre,rouge;thym,vert;oignon,vert;tomate,vert;Saucisse de Montbéliard,Rouge;ail,vert;laurier,vert',
-    'prix':'2,5'
-  };
-
-  try{
-    database.insertPlat(plat1);
-    database.insertPlat(plat2);
-    print("------------------------------");
-    print("insert reussi");
-
-  }
-  catch(e){
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    print('erreur lors insertion');
-  }*/
 
 
   runApp(const MyApp());  //lance l'application
