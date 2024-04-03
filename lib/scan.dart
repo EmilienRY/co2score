@@ -4,7 +4,8 @@ import 'dart:convert';
 class RecipeIngredient {   // classe des ingrédients
   final String name;
   final Color color;
-  RecipeIngredient({required this.name, required this.color});
+  final String val;
+  RecipeIngredient({required this.name, required this.color,required this.val});
 }
 
 class Recipe {  // classe des recettes   ces 2 classes sont la pour faciliter affichage par la suite
@@ -29,6 +30,7 @@ class PageScan extends StatelessWidget {
       final compressedData = base64.decode(scan);  // décompression
       final decompressedData = utf8.decode(compressedData);
       final List<String> ListePlats = decompressedData.split('}{');
+      print(ListePlats);
 
       for (int i = 0; i < ListePlats.length; i++) {
         ListePlats[i] = ListePlats[i].replaceAll(RegExp(r'[{}]+'), '');
@@ -37,7 +39,7 @@ class PageScan extends StatelessWidget {
       for (final recette in ListePlats) {  // traitements des strings de chaques plats
         String jsonString = '{' + recette + '}';
         Map<String, dynamic> plat = jsonDecode(jsonString);
-
+        print(plat);
         final String name = plat['nom'];
         final String colorString = plat['couleur'];
         final Color color = _parseColor(colorString);
@@ -49,10 +51,11 @@ class PageScan extends StatelessWidget {
 
         ingredientList.forEach((ingredient) {
           final List<String> parts = ingredient.split(',');
-          if (parts.length == 2) {
-            ingredients.add(RecipeIngredient(
-                name: parts[0], color: _parseColor(parts[1])));
+          if (parts.length == 3) {
+            ingredients.add(RecipeIngredient(name: parts[0], color: _parseColor(parts[1]),val: parts[2]));
+
           }
+
         });
 
         recipes.add(Recipe(name: name, color: color, ingredients: ingredients));
@@ -103,7 +106,10 @@ class PageScan extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 10),
-                          Text(recipes[index].ingredients[i].name),
+                          Text(
+                              recipes[index].ingredients[i].name + '\n' + recipes[index].ingredients[i].val + " (gramme de CO2) ",
+                            softWrap: true,
+                          ),
                         ],
                       ),
                     );
