@@ -139,21 +139,22 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         build: (context) {
           return p.Column(
             children: [
-              p.Text("Menu du jour :", style: p.TextStyle(fontSize: 20, fontWeight: p.FontWeight.bold)), // Titre avec une police plus grosse
+              p.Text("Menu du jour :", style: p.TextStyle(fontSize: 45, fontWeight: p.FontWeight.bold)), // Titre avec une police plus grosse
               p.SizedBox(width: 35),
               for (var platInfo in selectedPlats)
                 p.Container(
                   padding: const p.EdgeInsets.symmetric(vertical: 8), // Ajout d'un espace vertical entre chaque plat
                   child: p.Row(
-                    crossAxisAlignment: p.CrossAxisAlignment.start,
+                    crossAxisAlignment: p.CrossAxisAlignment.center,
+                    mainAxisAlignment: p.MainAxisAlignment.center,
                     children: [
                       p.Text("${platInfo.nom}", style: p.TextStyle(fontSize: 30, fontWeight: p.FontWeight.bold)), // Nom du plat avec une police plus grosse
                       p.SizedBox(width: 10), // Ajout d'un espace horizontal entre le nom du plat et le prix
                       p.Text("${platInfo.prix}", style: p.TextStyle(fontSize: 25)), // Prix du plat
                       p.SizedBox(width: 15), // Ajout d'un espace horizontal entre le prix et la couleur
                       p.Container(
-                        width: 100,
-                        height: 100,
+                        width: 50,
+                        height: 50,
                         child: p.Image(
                             p.MemoryImage(
                                 platQR[platInfo.nom]!
@@ -164,7 +165,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                   ),
                 ),
               p.SizedBox(height: 20), // Ajout d'un espace vertical entre chaque plat
-              p.Text("Détails du menu :"),   //qrcode
+              p.Text("Pour voir tout le menu :"),   //qrcode
 
               p.Container(
                     width: 100,
@@ -192,7 +193,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       case 'vert':
         return Colors.green;
       case 'jaune':
-        return Color.fromRGBO(255, 204, 0, 1);
+        return Color.fromRGBO(153, 153, 0, 1);
       default:
         return null;
     }

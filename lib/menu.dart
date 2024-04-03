@@ -3,6 +3,7 @@ import 'CreationPlat.dart';
 import 'visuPlat.dart';
 import 'database.dart';
 import 'creationEtiquette.dart';
+import 'styles.dart';
 
 class pageMenu extends StatefulWidget {
   @override
@@ -18,7 +19,7 @@ class _pageMenuState extends State<pageMenu> {
     _loadData();
   }
 
-  Future<void> _loadData() async { // pour charger les plats depuis BD
+  Future<void> _loadData() async {
     try {
       final plats = await DatabaseHelper.instance.queryAllPlats();
       setState(() {
@@ -30,86 +31,89 @@ class _pageMenuState extends State<pageMenu> {
   }
 
   @override
-  Widget build(BuildContext context) {  // mise en forme du menu
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('page des menus'),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => pageCreation()),
-                    );
-                  },
-                  child: Text('Ajouter un plat'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GeneratePdfPage()),
-                    );
-                  },
-                  child: Text('Créer une étiquette'),
-                ),
-              ],
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: AppStyles.appTheme,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('page des menus'),
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => pageCreation()),
+                      );
+                    },
+                    child: Text('Ajouter un plat'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => GeneratePdfPage()),
+                      );
+                    },
+                    child: Text('Créer une étiquette'),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 20),
-                    Text(
-                      'Liste des plats',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    if (buttonTexts.isNotEmpty)
-                      Column(
-                        children: buttonTexts.map(
-                              (text) => ListTile(
-                            title: Text(text),
-                            trailing: IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                _deletePlat(text);
+            Expanded(
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 20),
+                      Text(
+                        'Liste des plats',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      if (buttonTexts.isNotEmpty)
+                        Column(
+                          children: buttonTexts.map(
+                                (text) => ListTile(
+                              title: Text(text),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  _deletePlat(text);
+                                },
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => pageVisu(recette: text),
+                                  ),
+                                );
                               },
                             ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => pageVisu(recette: text),
-                                ),
-                              );
-                            },
-                          ),
-                        ).toList(),
-                      ),
-                    if (buttonTexts.isEmpty)
-                      Text(
-                        'ajoutez des plats pour les voir apparaitre ici', style: TextStyle(fontSize: 18),),
-                  ],
+                          ).toList(),
+                        ),
+                      if (buttonTexts.isEmpty)
+                        Text(
+                          'ajoutez des plats pour les voir apparaitre ici', style: TextStyle(fontSize: 18),),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  void _deletePlat(String nomPlat) async { // supp le plat de la BD
+  void _deletePlat(String nomPlat) async {
     try {
       await DatabaseHelper.instance.deletePlat(nomPlat);
       _loadData();
