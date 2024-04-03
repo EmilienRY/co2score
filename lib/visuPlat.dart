@@ -4,8 +4,9 @@ import 'database.dart';
 class RecipeIngredient {
   final String name;
   final Color? color;
+  final String ValCarbone;
 
-  RecipeIngredient({required this.name, this.color});
+  RecipeIngredient({required this.name, this.color,required this.ValCarbone});
 }
 
 class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on ait cliqué dessus
@@ -36,7 +37,8 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
               if (recipeDetails.length >= 2) {
                 String name = recipeDetails[0];
                 Color? color = _parseColor(recipeDetails[1]); // appel de la fonction qui apartir d'un string renvoie sa couleur
-                ingredients.add(RecipeIngredient(name: name, color: color));
+                String ValCarbone=recipeDetails[2];
+                ingredients.add(RecipeIngredient(name: name, color: color,ValCarbone:ValCarbone));
               } else {
                 print('Erreur : Les détails de la recette ne sont pas complets.');
               }
@@ -78,7 +80,7 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
                             ),
                           ),
                           SizedBox(width: 10),
-                          Text(ingredients[index].name),
+                          Text(ingredients[index].name + '\n' + ingredients[index].ValCarbone + " (gramme de CO2) "),
                         ],
                       ),
                     );

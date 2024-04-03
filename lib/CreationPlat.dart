@@ -221,8 +221,8 @@ class _MyPageState extends State<pageCreation> {
                           } else {
                             color = 'Jaune';
                           }
-                          // Ajouter l'ingrédient avec sa couleur au format "ingredient,Couleur;..."
-                          ingredientsList.add('$ingredient,$color');
+                          // Ajouter l'ingrédient avec sa couleur au format "ingredient,Couleur,nb;..."
+                          ingredientsList.add('$ingredient,$color,$totalCO2');
                         }
 
                       } else {
