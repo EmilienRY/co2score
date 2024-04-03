@@ -254,17 +254,16 @@ class _MyPageState extends State<pageCreation> {
                     'couleur': couleurPlat,
                     'ingredients': ingredients,
                     'prix': _controllerPrix.text, // recup depuis le textfield du prix
+                    'emission' : finalCO2
                   };
+
+                  print(plat);
 
                   try {
                     await DatabaseHelper.instance.insertPlat(plat); // Enregistrer le plat dans la base de données
-                    print("Insertion réussie");
 
-                    Navigator.pushReplacement(  // Retourner à la page du menu une fois sauvegarder
+                    Navigator.pop(context); // pop permet de retourner à la dernière page
 
-                    context,
-                      MaterialPageRoute(builder: (context) => pageMenu()),
-                    );
 
                   } catch (e) {
                     print("Erreur lors de l'insertion");

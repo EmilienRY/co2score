@@ -139,7 +139,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         build: (context) {
           return p.Column(
             children: [
-              p.Text("Menu du jour :", style: p.TextStyle(fontSize: 45, fontWeight: p.FontWeight.bold)), // Titre avec une police plus grosse
+              p.Text("Menu du jour :", style: p.TextStyle(fontSize: 40, fontWeight: p.FontWeight.bold)), // Titre avec une police plus grosse
               p.SizedBox(width: 35),
               for (var platInfo in selectedPlats)
                 p.Container(
@@ -148,13 +148,13 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                     crossAxisAlignment: p.CrossAxisAlignment.center,
                     mainAxisAlignment: p.MainAxisAlignment.center,
                     children: [
-                      p.Text("${platInfo.nom}", style: p.TextStyle(fontSize: 30, fontWeight: p.FontWeight.bold)), // Nom du plat avec une police plus grosse
+                      p.Text("${platInfo.nom}", style: p.TextStyle(fontSize: 25, fontWeight: p.FontWeight.bold)), // Nom du plat avec une police plus grosse
                       p.SizedBox(width: 10), // Ajout d'un espace horizontal entre le nom du plat et le prix
-                      p.Text("${platInfo.prix}", style: p.TextStyle(fontSize: 25)), // Prix du plat
+                      p.Text("${platInfo.prix}", style: p.TextStyle(fontSize: 20)), // Prix du plat
                       p.SizedBox(width: 15), // Ajout d'un espace horizontal entre le prix et la couleur
                       p.Container(
-                        width: 50,
-                        height: 50,
+                        width: 65,
+                        height: 65,
                         child: p.Image(
                             p.MemoryImage(
                                 platQR[platInfo.nom]!
@@ -242,7 +242,8 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         final platData = {
           'nom': plat['nom'],
           'couleur': plat['couleur'],
-          'ingredients': plat['ingredients'],
+          'ingredients': "",
+          'emission':  plat['emission']
         };
         final platJson = jsonEncode(platData);  //on fait chaine au format json pour plus de lisibilité
         qrDataBuffer.write(platJson);
@@ -281,6 +282,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
           'nom': plat['nom'],
           'couleur': plat['couleur'],
           'ingredients': plat['ingredients'],
+          'emission': plat['emission']
         };
         final platJson = jsonEncode(platData);  //on fait chaine au format json pour plus de lisibilité
         qrDataBuffer.write(platJson);

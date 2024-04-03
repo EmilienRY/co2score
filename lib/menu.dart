@@ -30,6 +30,8 @@ class _pageMenuState extends State<pageMenu> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,11 +48,12 @@ class _pageMenuState extends State<pageMenu> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      await Navigator.push(  // on ajoute await pour attendre qu'on revienne sur cette page aprés pageCreation pour update données
                         context,
                         MaterialPageRoute(builder: (context) => pageCreation()),
                       );
+                      _loadData();
                     },
                     child: Text('Ajouter un plat'),
                   ),

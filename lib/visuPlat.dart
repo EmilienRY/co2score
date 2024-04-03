@@ -28,6 +28,7 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
           if (recetteDetail.isEmpty) {  // si erreur et que le plat select n'existe pas dans la BD
             return Text('Recette non trouvée dans la base de données');
           } else {
+
             String recetteString = recetteDetail['ingredients'];  // formatage des donne du plat pour les afficheer
             List<String> recipes = recetteString.split(';');
             List<RecipeIngredient> ingredients = [];
@@ -63,6 +64,17 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
                     ),
                   ),
                 ),
+                    Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      children: [ Text(
+                          double.parse(recetteDetail['emission']).toStringAsFixed(3)+" grammes de C02",
+                      )
+                      ]
+
+                    ),
+
+                    Divider(),
               Expanded(
                 child: ListView.separated(
                   itemCount: ingredients.length,
@@ -70,6 +82,7 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Row(
+
                         children: [
                           Container(
                             width: 20,
@@ -80,7 +93,10 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
                             ),
                           ),
                           SizedBox(width: 10),
-                          Text(ingredients[index].name + '\n' + ingredients[index].ValCarbone + " (gramme de CO2) "),
+                          Expanded(
+                            child: Text(ingredients[index].name + '\n' + double.parse(ingredients[index].ValCarbone).toStringAsFixed(3) + " grammes de CO2 "),
+                          )
+
                         ],
                       ),
                     );

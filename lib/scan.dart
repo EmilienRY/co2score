@@ -12,8 +12,8 @@ class Recipe {  // classe des recettes   ces 2 classes sont la pour faciliter af
   final String name;
   final Color color;
   final List<RecipeIngredient> ingredients;
-
-  Recipe({required this.name, required this.color, required this.ingredients});
+  final String emission;
+  Recipe({required this.name, required this.color, required this.ingredients,required this.emission});
 }
 
 class PageScan extends StatelessWidget {
@@ -44,6 +44,7 @@ class PageScan extends StatelessWidget {
         final String colorString = plat['couleur'];
         final Color color = _parseColor(colorString);
         final String ingredientsString = plat['ingredients'];
+        final String emission = plat['emission'];
 
         final List<RecipeIngredient> ingredients = [];
 
@@ -58,7 +59,7 @@ class PageScan extends StatelessWidget {
 
         });
 
-        recipes.add(Recipe(name: name, color: color, ingredients: ingredients));
+        recipes.add(Recipe(name: name, color: color, ingredients: ingredients,emission: emission));
       }
 
       return Scaffold( // affichage des recettes
@@ -84,7 +85,7 @@ class PageScan extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 10),
-                      Text(recipes[index].name),
+                      Text(recipes[index].name+", "+recipes[index].emission+ " grammes de C02" ),
                     ],
                   ),
                 ),
@@ -106,10 +107,13 @@ class PageScan extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 10),
+                          Expanded(child:
                           Text(
-                              recipes[index].ingredients[i].name + '\n' + recipes[index].ingredients[i].val + " (gramme de CO2) ",
+                            recipes[index].ingredients[i].name + '\n' +  double.parse(recipes[index].ingredients[i].val).toStringAsFixed(3) + " grammes de CO2 ",
                             softWrap: true,
                           ),
+                          )
+
                         ],
                       ),
                     );
