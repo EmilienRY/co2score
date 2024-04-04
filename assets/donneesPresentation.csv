@@ -2,6 +2,8 @@ Ail cru;3,58E-01
 Ail séché en poudre;7,50E-01
 Aile de poulet;9,32E+00
 Amidon de maïs ou fécule de maïs;1,08E+00
+Beignet de Calamar ou Calmar;5,24E+00
+Beignet de crevette;6,58E+00
 Beurre de cacahuète ou Pâte d'arachide;3,19E+00
 Beurre demi-sel;7,73E+00
 Beurre doux;7,79E+00
@@ -17,16 +19,26 @@ Brochette de volaille;9,11E+00
 Brocoli;1,09E+00
 Brownie au chocolat;7,20E+00
 Cabillaud;1,32E+01
+Calamar ou Calmar cru;5,70E+00
+Calamar ou Calmar cuit;6,53E+00
 Carotte crue;3,64E-01
 Carotte cuite;9,35E-01
+Carpe;7,90E+00
+Cervelas;6,89E+00
+Cervelle d’agneau;2,89E+01
+Cervelle de porc;2,90E+00
+Cervelle de veau;2,44E+01
 Champignon;4,94E-01
 Champignon à la grecque;2,77E+00
 Châtaigne crue;1,88E+00
 Châtaigne grillée;1,94E+00
 Cheddar;6,18E+00
+Chevreau;5,09E+01
+Chipolata;6,65E+00
 Chips de crevette;4,20E+00
 Chocolat blanc en tablette;1,12E+01
 Chocolat noir en tablette;1,69E+01
+Chorizo;6,02E+00
 Chou blanc cru;6,61E-01
 Chou de Bruxelles cru;5,76E-01
 Chou de Bruxelles cuit;1,06E+00
@@ -40,6 +52,8 @@ Citron;7,11E-01
 Citron vert;5,31E-01
 Clémentine;1,22E+00
 Clou de girofle;8,14E+00
+Coeur d’Agneau;2,89E+01
+Coeur de Dinde;2,61E+00
 Coeur de palmier;1,64E+00
 Coing;5,41E-01
 Compote de pomme;8,44E-01
@@ -47,17 +61,21 @@ Comté;6,22E+00
 Concentré de Tomate;2,82E+00
 Concombre;4,73E-01
 Cordon bleu de volaille;6,20E+00
+Côte de Boeuf;3,09E+01
 Côte de Porc;1,30E+01
+Côte de Veau;2,34E+01
 Coulommiers;5,41E+00
 Crème de marrons;1,67E+00
 Crème pâtissière;1,39E+00
 Crevette;2,41E+01
+Cuisse de Canard ;6,97E+00
 Cuisse de Poulet;9,32E+00
 Double concentré de Tomate;4,13E+00
 Églefin ou Eglefin;1,32E+01
 Emmental ou emmenthal râpé;6,16E+00
 Endive au jambon;3,60E+00
 Endive crue;9,38E-01
+Entrecôte de Boeuf;2,73E+01
 Épinard;8,04E-01
 Escalope de dinde panée ou escalope viennoise ou milanaise;6,26E+00
 Escalope de poulet panée;9,05E+00
@@ -66,6 +84,7 @@ Escalope végétale ou steak à base de soja;1,86E+00
 Espadon;5,15E+00
 Farine;7,19E-01
 Farine de maïs;7,44E-01
+Faux-filet de Boeuf;3,46E+01
 Feuille de Laurier;8,46E-01
 Filet d’Agneau;5,09E+01
 Filet de bacon;6,99E+00
@@ -104,6 +123,7 @@ Huître;4,91E+00
 Ile flottante au rayon frais;1,81E+00
 Insecte (Mouche Soldat Noir);4,46E+00
 Jambon cru;1,39E+01
+Jarret de Boeuf;3,47E+01
 Jus de pomme;5,01E-01
 Ketchup;9,45E-01
 Lait concentré entier;2,51E+00
@@ -116,6 +136,8 @@ Levure alimentaire;5,61E+00
 Levure chimique ou Poudre à lever;5,61E+00
 Levure de boulanger déshydratée;5,61E+00
 Mâche crue;9,41E-01
+Magret de Canard fumé;9,57E+00
+Magret de Canard grillé ou poêlé;9,11E+00
 Maïs entier cru;8,10E-01
 Mayonnaise;2,53E+00
 Miel;1,20E+00
@@ -129,6 +151,7 @@ Noisette;4,65E+00
 Noisette grillée;4,92E+00
 Nuggets de poulet ou de volaille;5,91E+00
 Oignon;8,33E-01
+Onglet de Boeuf;3,43E+01
 Oreille de porc;2,55E+00
 Pain au chocolat;5,14E+00
 Pain au lait;2,53E+00
@@ -202,6 +225,7 @@ Saucisson sec;5,93E+00
 Saumon fumé;7,99E+00
 Sel;6,04E-01
 Soupe aux champignons;3,60E+00
+Steak haché de Boeuf;4,21E+01
 Substitut de repas hypocalorique en poudre ou à boire;2,31E+00
 Sucre blanc;6,12E-01
 Sucre roux;1,11E+00
@@ -212,6 +236,7 @@ Tomate cerise;5,82E-01
 Tomate de saison crue;5,82E-01
 Tomate hors saison crue;1,96E+00
 Truite arc en ciel;7,90E+00
+Viande de Canard;9,32E+00
 Viande de Pigeon;9,32E+00
 Vin blanc mousseux;1,23E+00
 Vin blanc sec;1,23E+00
@@ -224,28 +249,3 @@ Vinaigre de cidre;9,19E-01
 Vodka;1,03E+00
 Whisky;1,03E+00
 Zeste de Citron;8,84E-01
-Beignet de crevette;6,58E+00
-Faux-filet de Boeuf;3,46E+01
-Jarret de Boeuf;3,47E+01
-Onglet de Boeuf;3,43E+01
-Steak haché de Boeuf;4,21E+01
-Beignet de Calamar ou Calmar;5,24E+00
-Calamar ou Calmar cuit;6,53E+00
-Calamar ou Calmar cru;5,70E+00
-Cuisse de Canard ;6,97E+00
-Magret de Canard fumé;9,57E+00
-Magret de Canard grillé ou poêlé;9,11E+00
-Carpe;7,90E+00
-Cervelas;6,89E+00
-Cervelle d’agneau;2,89E+01
-Cervelle de porc;2,90E+00
-Cervelle de veau;2,44E+01
-Chevreau;5,09E+01
-Chipolata;6,65E+00
-Chorizo;6,02E+00
-Coeur d’Agneau;2,89E+01
-Coeur de Dinde;2,61E+00
-Viande de Canard;9,32E+00
-Côte de Veau;2,34E+01
-Côte de Boeuf;3,09E+01
-Entrecôte de Boeuf;2,73E+01
