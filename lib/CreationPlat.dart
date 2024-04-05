@@ -60,7 +60,14 @@ class _MyPageState extends State<pageCreation> {
                         child: Autocomplete<String>(
                           optionsBuilder: (TextEditingValue textEditingValue) {
                             // Récupérer la liste des ingrédients similaires depuis la base de données
-                            return DatabaseHelper.instance.getSimilarIngredients(textEditingValue.text);
+                            if( textEditingValue.text != null && textEditingValue.text != "" && textEditingValue.text != " "){
+                              return DatabaseHelper.instance.getSimilarIngredients(textEditingValue.text);
+
+                            }
+                            else{
+                              return DatabaseHelper.instance.getVide();
+                            }
+                           
                           },
                           onSelected: (String selectedIngredient) {
                             setState(() {
