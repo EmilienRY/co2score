@@ -85,7 +85,7 @@ class PageScan extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 10),
-                      Text(recipes[index].name+", "+recipes[index].emission+ " grammes de C02" ),
+                      Text(recipes[index].name+", "+ double.parse(recipes[index].emission).toStringAsFixed(3)+ " grammes de C02" ),
                     ],
                   ),
                 ),

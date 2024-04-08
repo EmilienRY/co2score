@@ -103,6 +103,12 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
   }
 
 
+  Future<int> insertIngredient(Map<String, dynamic> ingre) async {   // rajout d'un plat
+    Database db = await instance.database;
+    return await db.insert(tableIngr, ingre);
+  }
+
+
   Future<Map<String, dynamic>?> getIngredient(String nomIngr) async {   // recup de l'ingredient avec son nom
     Database db = await instance.database;
     List<Map<String, dynamic>> result = await db.query(

@@ -153,8 +153,8 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                       p.Text("${platInfo.prix}", style: p.TextStyle(fontSize: 20)), // Prix du plat
                       p.SizedBox(width: 15), // Ajout d'un espace horizontal entre le prix et la couleur
                       p.Container(
-                        width: 65,
-                        height: 65,
+                        width: 75,
+                        height: 75,
                         child: p.Image(
                             p.MemoryImage(
                                 platQR[platInfo.nom]!
@@ -300,7 +300,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       color: couleur,
     );
 
-    final qrCode = await qrPainter.toImageData(1200.0); // on donne une grande taille pour éviter bug qui coupe le qr code à la génération
+    final qrCode = await qrPainter.toImageData(2000.0); // on donne une grande taille pour éviter bug qui coupe le qr code à la génération
     if (qrCode != null) {
       return Uint8List.fromList(qrCode.buffer.asUint8List());  // on retourne le qrcode
     } else {
