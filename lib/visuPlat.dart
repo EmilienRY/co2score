@@ -131,6 +131,10 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
         return Colors.green;
       case 'jaune':
         return Colors.yellow;
+      case 'vertf':
+        return Color.fromRGBO(12, 126, 12, 1.0);
+      case 'orange':
+        return Color.fromRGBO(197, 119, 0, 1.0);
       default:
         return null;
     }

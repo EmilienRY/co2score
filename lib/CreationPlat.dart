@@ -227,12 +227,16 @@ class _MyPageState extends State<pageCreation> {
 
 
                                 // on détermine la couleur de l'ingrédient en fonction de l'émission de 100 g de produit
-                                if (GparG < 150) {
+                                if (GparG <= 150) {
+                                  color = 'Vertf';
+                                } else if (GparG > 150 && GparG<=250) {
                                   color = 'Vert';
-                                } else if (GparG > 450) {
-                                  color = 'Rouge';
-                                } else {
+                                } else if (GparG > 250 && GparG<=400) {
                                   color = 'Jaune';
+                                } else if (GparG > 400 && GparG<=550) {
+                                  color = 'Orange';
+                                } else {
+                                  color = 'rouge';
                                 }
                                 // Ajouter l'ingrédient avec sa couleur au format "ingredient,Couleur,nb;..."
                                 ingredientsList.add('$ingredient,$color,$totalCO2');
@@ -252,12 +256,17 @@ class _MyPageState extends State<pageCreation> {
 
                         double CO2pour100=(finalCO2/quantitePlat)*100;  // calcul de la quantité de CO2 émis pour 100g de plat.
 
-                        if (CO2pour100 < 150) {   //si < à 150 le plat est vert
-                          couleurPlat = 'Vert';
-                        } else if (CO2pour100 > 450) {  //si > à 450 le plat est rouge
-                          couleurPlat = 'Rouge';
-                        } else {
-                          couleurPlat = 'Jaune';  // sinon c'est qu'il est jaune
+                        if (CO2pour100 <= 150) {   //si < à 150 le plat est vert
+                          couleurPlat = 'Vertf';
+                        } else if (CO2pour100 > 150 && CO2pour100<=250) {  //si > à 450 le plat est rouge
+                          couleurPlat = 'vert';
+                        } else if (CO2pour100 > 250 && CO2pour100<=400) {
+                          couleurPlat = 'Jaune';
+                        } else if (CO2pour100 > 400 && CO2pour100<=550) {
+                          couleurPlat = 'Orange';
+                        }
+                        else {
+                          couleurPlat = 'rouge';
                         }
 
 

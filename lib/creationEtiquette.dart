@@ -192,6 +192,10 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
         return Colors.red;
       case 'vert':
         return Colors.green;
+      case 'vertf':
+        return Color.fromRGBO(12, 126, 12, 1.0);
+      case 'orange':
+        return Color.fromRGBO(197, 119, 0, 1.0);
       case 'jaune':
         return Color.fromRGBO(153, 153, 0, 1);
       default:
