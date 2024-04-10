@@ -12,7 +12,9 @@ class pageMenu extends StatefulWidget {
 
 class _pageMenuState extends State<pageMenu> {
   List<String> buttonTexts = [];
+  int _currentIndex = 1;
 
+  PageController _pageController = PageController(initialPage: 0);
   @override
   void initState() {
     super.initState();

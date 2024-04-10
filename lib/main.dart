@@ -18,14 +18,11 @@ void main() async {   //fonction main de l'app
   final database = DatabaseHelper.instance;
   await database.initializeDatabase();
 
-
-
-
   runApp(const MyApp());  //lance l'application
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +38,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -54,8 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Barcode? result;
   QRViewController? controller;
 
+  int _currentIndex = 0;
+  PageController _pageController = PageController(initialPage: 0);
+
   @override
-  Widget build(BuildContext context) {   //page d'acceuil
+  Widget build(BuildContext context) {   //page d'accueil
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.0),
@@ -98,6 +98,20 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onItemTapped,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.access_time),
+            label: 'test',
+          ),
+        ],
+      ),
     );
   }
 
@@ -117,4 +131,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _currentIndex = index+1;
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 300), curve: Curves.ease);
+    });
+  }
 }
