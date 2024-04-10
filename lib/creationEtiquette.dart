@@ -158,8 +158,8 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                         child: p.Image(
                             p.MemoryImage(
                                 platQR[platInfo.nom]!
-                        )
-                      ),
+                            )
+                        ),
                       ),
                     ],
                   ),
@@ -168,9 +168,9 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
               p.Text("Pour voir tout le menu :"),   //qrcode
 
               p.Container(
-                    width: 100,
-                    height: 100,
-                    child: p.Image(p.MemoryImage(qrImageData)),
+                width: 100,
+                height: 100,
+                child: p.Image(p.MemoryImage(qrImageData)),
               ),
             ],
           );
@@ -259,7 +259,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
 
     final qrPainter = QrPainter(        // Création du QR code avec les données compressées
 
-    data: compressedDataString,
+      data: compressedDataString,
       version: QrVersions.auto,
       gapless: true,
       color: Colors.black,
@@ -280,17 +280,17 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     final StringBuffer qrDataBuffer = StringBuffer();
 
 
-      final plat = await _getPlatIngredients(selectedPlat.nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
-      if (plat != null) {
-        final platData = {
-          'nom': plat['nom'],
-          'couleur': plat['couleur'],
-          'ingredients': plat['ingredients'],
-          'emission': plat['emission']
-        };
-        final platJson = jsonEncode(platData);  //on fait chaine au format json pour plus de lisibilité
-        qrDataBuffer.write(platJson);
-      }
+    final plat = await _getPlatIngredients(selectedPlat.nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
+    if (plat != null) {
+      final platData = {
+        'nom': plat['nom'],
+        'couleur': plat['couleur'],
+        'ingredients': plat['ingredients'],
+        'emission': plat['emission']
+      };
+      final platJson = jsonEncode(platData);  //on fait chaine au format json pour plus de lisibilité
+      qrDataBuffer.write(platJson);
+    }
 
 
     final compressedData = utf8.encode(qrDataBuffer.toString());  // on compresse les donne (si on ne le fait pas le qrcode généré peut le pas être lisible)

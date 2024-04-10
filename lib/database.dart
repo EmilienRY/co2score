@@ -43,13 +43,13 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
   }
 
 
-    static Database? _database;  // db qu'on utilise dans les fonctions
+  static Database? _database;  // db qu'on utilise dans les fonctions
 
-    Future<Database> get database async {
-      if (_database != null) return _database!;
-      _database = await _initDatabase();
-      return _database!;
-    }
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDatabase();
+    return _database!;
+  }
 
   // ouvrir bd pour pouvoir l'utiliser
   Future<Database> _initDatabase() async {

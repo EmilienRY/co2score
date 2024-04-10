@@ -46,65 +46,65 @@ class pageVisu extends StatelessWidget {  // page pour visu le plat aprés qu'on
             });
 
             return Scaffold( // mise en forme de la page
-              appBar: AppBar(
-                title: Text(ingredients.isNotEmpty ? recetteDetail['nom'] : 'Aucune recette'),
-              ),
+                appBar: AppBar(
+                  title: Text(ingredients.isNotEmpty ? recetteDetail['nom'] : 'Aucune recette'),
+                ),
                 body: Column(
                   children: [
-                  Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.all(20),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: _parseColor(recetteDetail['couleur'] ?? ''),
+                    Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(20),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _parseColor(recetteDetail['couleur'] ?? ''),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
                     Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
-                      children: [ Text(
+                        children: [ Text(
                           double.parse(recetteDetail['emission']).toStringAsFixed(3)+" grammes de C02",
-                      )
-                      ]
+                        )
+                        ]
 
                     ),
 
                     Divider(),
-              Expanded(
-                child: ListView.separated(
-                  itemCount: ingredients.length,
-                  separatorBuilder: (context, index) => Divider(),
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Row(
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: ingredients.length,
+                        separatorBuilder: (context, index) => Divider(),
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Row(
 
-                        children: [
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: ingredients[index].color ?? Colors.black,
+                              children: [
+                                Container(
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: ingredients[index].color ?? Colors.black,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Text(ingredients[index].name + '\n' + double.parse(ingredients[index].ValCarbone).toStringAsFixed(3) + " grammes de CO2 "),
+                                )
+
+                              ],
                             ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(ingredients[index].name + '\n' + double.parse(ingredients[index].ValCarbone).toStringAsFixed(3) + " grammes de CO2 "),
-                          )
-
-                        ],
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
 
-              )
-            ],
+                    )
+                  ],
                 )
             );
           }
