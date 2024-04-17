@@ -8,6 +8,8 @@ import 'database.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'menu.dart';
+import 'main.dart';
 
 class PlatInfo {
   final String nom;
@@ -91,9 +93,11 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                 },
                 child: Text("Créer le PDF"),
               ),
+
             ],
           ),
         ),
+
       ),
     );
   }
@@ -311,10 +315,6 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       throw Exception("Erreur lors de la génération du QR code");
     }
   }
-
-
-
-
 
 
 

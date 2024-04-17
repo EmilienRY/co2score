@@ -1,9 +1,10 @@
+import 'package:co2score/pageScan.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
 import 'menu.dart';
-import 'scan.dart';
 import 'database.dart';
+import 'creationEtiquette.dart';
+import 'CreationPlat.dart';
 
 void main() async {   //fonction main de l'app
 
@@ -47,95 +48,76 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? result;
-  QRViewController? controller;
-
   int _currentIndex = 0;
-  PageController _pageController = PageController(initialPage: 0);
+
+  List<Widget> _widgetOptions = <Widget>[
+    pageScan(),
+    pageMenu(),
+    pageCreation(),
+    GeneratePdfPage(),
+  ];
+
 
   @override
   Widget build(BuildContext context) {   //page d'accueil
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
-        child: AppBar(
-          backgroundColor: Colors.green,
-          centerTitle: true,
-          title: const Text('CO2 Score'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                controller?.pauseCamera();   // si on appuie sur bouton on met en pause caméra pour pas utiliser ressources pour rien
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => pageMenu()),  // bouton pour aller vers page de la liste des menu
-                ).then((value) {
-                  controller?.resumeCamera();  // on lance la caméra
-                });
-              },
+      extendBody: true,
+      bottomNavigationBar:
+
+      Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+            boxShadow: [
+              BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
             ),
-          ],
-        ),
-      ),
-      body: Stack(   // lecteur de qr codes
-        children: <Widget>[
-          QRView(
-            key: qrKey,
-            onQRViewCreated: _onQrViewCreated,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(   // overlay pour voir ou scanner
-                border: Border.all(color: Colors.red, width: 2),
-                borderRadius: BorderRadius.circular(10),
-              ),
+            child: BottomNavigationBar(
+
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(icon: Icon(qr_code_scanner),label: "scan"),
+                BottomNavigationBarItem(icon: Icon(chrome_reader_mode),label: "menu"),
+                BottomNavigationBarItem(icon: Icon(restaurant_menu),label: "plat"),
+                BottomNavigationBarItem(icon: Icon(article),label: "étiquette"),
+              ],
+              currentIndex: _currentIndex,
+              selectedItemColor: Colors.green,
+              unselectedItemColor: Colors.grey,
+              backgroundColor: Color(0xFFB6F2CB),
+              onTap: _onItemTapped,
             ),
-          ),
-        ],
+          )
+      )
+      ,
+      body: Navigator(
+        onGenerateRoute: (settings) {
+
+          return MaterialPageRoute(
+            builder: (context) => _widgetOptions[_currentIndex],
+          );
+        },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.access_time),
-            label: 'test',
-          ),
-        ],
-      ),
+
     );
   }
 
-  void _onQrViewCreated(QRViewController controller) {   // fonction d'écoute
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-      controller.pauseCamera();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PageScan(scan: scanData.code!),  // si on a scan on va vers page de scan avec les données du qr code
-        ),
-      ).then((_) => controller.resumeCamera());
-    });
-  }
+  static const IconData chrome_reader_mode = IconData(0xe162, fontFamily: 'MaterialIcons', matchTextDirection: true);
+  static const IconData restaurant_menu = IconData(0xe533, fontFamily: 'MaterialIcons');
+  static const IconData qr_code_scanner = IconData(0xe4f7, fontFamily: 'MaterialIcons');
+  static const IconData article = IconData(0xe0a2, fontFamily: 'MaterialIcons');
+
 
   void _onItemTapped(int index) {
     setState(() {
-      _currentIndex = index+1;
-      _pageController.animateToPage(index,
-          duration: Duration(milliseconds: 300), curve: Curves.ease);
+
+      if (_currentIndex != index) {
+        _currentIndex=index;
+      }
     });
   }
 }
