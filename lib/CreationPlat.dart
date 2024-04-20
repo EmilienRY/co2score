@@ -8,6 +8,9 @@ class IngredientRow {
 }
 
 class pageCreation extends StatefulWidget {
+
+
+
   @override
   _MyPageState createState() => _MyPageState();
 }
@@ -16,7 +19,7 @@ class _MyPageState extends State<pageCreation> {
   final TextEditingController _controllerNomPlat = TextEditingController();
   final TextEditingController _controllerPrix = TextEditingController();
 
-  final List<IngredientRow> ListIngredient = [];
+  List<IngredientRow> ListIngredient = [];
 
   void _supIngredient(int index) {
     setState(() {
@@ -147,6 +150,11 @@ class _MyPageState extends State<pageCreation> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+
+
+
+
                 ElevatedButton(
                   onPressed: () async {
                     // Vérifier si au moins un champ est vide
@@ -283,8 +291,29 @@ class _MyPageState extends State<pageCreation> {
                       try {
                         await DatabaseHelper.instance.insertPlat(plat); // Enregistrer le plat dans la base de données
 
-                        Navigator.pop(context); // pop permet de retourner à la dernière page
+                        _controllerNomPlat.clear();
+                        _controllerPrix.clear();
+                        setState(() {
+                          ListIngredient.clear();
+                        });
 
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Bien ajouté"),
+                              content: Text("Le plat a bien été ajouté dans la base de donné"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
                       } catch (e) {
                         print("Erreur lors de l'insertion");
@@ -293,6 +322,7 @@ class _MyPageState extends State<pageCreation> {
                   },
                   child: const Text('Valider plat'),
                 ),
+
 
 
                 ElevatedButton(
@@ -399,8 +429,30 @@ class _MyPageState extends State<pageCreation> {
                       try {
                         await DatabaseHelper.instance.insertIngredient(ingr); // Enregistrer l'ingredient dans la base de données
 
-                        Navigator.pop(context); // pop permet de retourner à la dernière page
+                        _controllerNomPlat.clear();
+                        _controllerPrix.clear();
+                        setState(() {
+                          ListIngredient.clear();
+                        });
 
+
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Bien ajouté"),
+                              content: Text("L'ingrédient a bien été ajouté dans la base de donné"),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
                       } catch (e) {
                         print("Erreur lors de l'insertion");

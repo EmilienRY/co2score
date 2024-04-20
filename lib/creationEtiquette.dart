@@ -60,6 +60,13 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              ElevatedButton(   //bouton pour générer pdf
+                onPressed: () async {
+                  String path = await makePdf(selectedPlats); //appel la fonction pour faire pdf et on recup le chemin d'accé
+                  ouverturePDF(path); //ouverture du pdf
+                },
+                child: Text("Créer le PDF"),
+              ),
               Text(
                 'Choisissez les plats à inclure dans le PDF :',
               ),
@@ -86,13 +93,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                   },
                 ),
               ),
-              TextButton(   //bouton pour générer pdf
-                onPressed: () async {
-                  String path = await makePdf(selectedPlats); //appel la fonction pour faire pdf et on recup le chemin d'accé
-                  ouverturePDF(path); //ouverture du pdf
-                },
-                child: Text("Créer le PDF"),
-              ),
+
 
             ],
           ),

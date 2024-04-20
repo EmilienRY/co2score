@@ -42,30 +42,7 @@ class _pageMenuState extends State<pageMenu> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => pageCreation()),
-                    );
-                    _loadData();
-                  },
-                  child: Text('Ajouter un plat'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => GeneratePdfPage()),
-                    );
-                  },
-                  child: Text('Créer une étiquette'),
-                ),
-              ],
-            ),
+
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -90,8 +67,7 @@ class _pageMenuState extends State<pageMenu> {
                               },
                             ),
                             onTap: () {
-                              Navigator.push(
-                                context,
+                              Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => pageVisu(recette: text),
                                 ),
