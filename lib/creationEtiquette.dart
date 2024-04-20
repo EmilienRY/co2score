@@ -54,7 +54,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
       theme: AppStyles.themeData,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('créer une étiquette'),
+          title: const Text('Créer une étiquette'),
         ),
 
         body: Center(

@@ -86,6 +86,8 @@ class _hubState extends State<hub> {
                 topRight: Radius.circular(30.0),
               ),
               child:  BottomNavigationBar(
+                //type: BottomNavigationBarType.fixed,
+                backgroundColor: Color(0xFFB6F2CB),
                 items: <BottomNavigationBarItem>[
                   BottomNavigationBarItem(icon: Icon(qr_code_scanner),label: "scan"),
                   BottomNavigationBarItem(icon: Icon(chrome_reader_mode),label: "menu"),

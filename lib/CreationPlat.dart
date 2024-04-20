@@ -31,7 +31,7 @@ class _MyPageState extends State<pageCreation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Créer votre plat'),
+        title: Text('Créer un plat'),
       ),
       body: Center(
         child: Column(
@@ -52,12 +52,21 @@ class _MyPageState extends State<pageCreation> {
                 labelText: 'Prix du plat',
               ),
             ),
-            const SizedBox(height: 30),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  ListIngredient.add(IngredientRow());
+                });
+              },
+            ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: ListIngredient.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Row(
+                  return
+                   Row(
                     children: [
                       Expanded(
                         child: Autocomplete<String>(
@@ -131,28 +140,27 @@ class _MyPageState extends State<pageCreation> {
                         onPressed: () => _supIngredient(index),
                       ),
                     ],
+
                   );
+
                 },
               ),
             ),
             const SizedBox(height: 30),
-            ElevatedButton(
+           /* ElevatedButton(
               onPressed: () {
                 setState(() {
                   ListIngredient.add(IngredientRow());
                 });
               },
               child: const Text('Ajouter un ingrédient'),
-            ),
+            ),*/
             const SizedBox(height: 30),
             Row(
 
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-
-
 
 
                 ElevatedButton(

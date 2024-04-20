@@ -41,12 +41,14 @@ class AppStyles {
     ),
 
 
-
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: primaryColor,
       selectedItemColor: secondaryColor,
       unselectedItemColor: lightGreen,
     ),
+
+
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(secondaryColor),

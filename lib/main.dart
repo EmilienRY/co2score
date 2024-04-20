@@ -35,8 +35,7 @@ class MyApp extends StatelessWidget {
         message: "Appuyez à nouveau pour quitter l'application",
         textStyle: TextStyle(fontSize: 17,color: Colors.white),
         child: hub(title: "CO2Score"),
-      )
-      ,
+      ),
     );
   }
 }

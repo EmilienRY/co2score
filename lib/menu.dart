@@ -35,7 +35,7 @@ class _pageMenuState extends State<pageMenu> {
       theme: AppStyles.themeData, // Utilisez le thème défini dans styles.dart
       home: Scaffold(
         appBar: AppBar(
-          title: Text('page des menus'),
+          title: Text('Liste des plats'),
         ),
 
         body: Column(
@@ -52,10 +52,7 @@ class _pageMenuState extends State<pageMenu> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 20),
-                      Text(
-                        'Liste des plats',
-                        style: TextStyle(fontSize: 18),
-                      ),
+
                       if (buttonTexts.isNotEmpty)
                         Column(
 
