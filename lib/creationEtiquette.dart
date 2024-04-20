@@ -8,8 +8,7 @@ import 'database.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:typed_data';
 import 'dart:convert';
-import 'menu.dart';
-import 'main.dart';
+import 'styles.dart';
 
 class PlatInfo {
   final String nom;
@@ -52,20 +51,30 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   @override
   Widget build(BuildContext context) {   //page de selection
     return MaterialApp(
+      theme: AppStyles.themeData,
       home: Scaffold(
         appBar: AppBar(
           title: const Text('créer une étiquette'),
         ),
+
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+
+              ),
               ElevatedButton(   //bouton pour générer pdf
                 onPressed: () async {
                   String path = await makePdf(selectedPlats); //appel la fonction pour faire pdf et on recup le chemin d'accé
                   ouverturePDF(path); //ouverture du pdf
                 },
                 child: Text("Créer le PDF"),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+
               ),
               Text(
                 'Choisissez les plats à inclure dans le PDF :',

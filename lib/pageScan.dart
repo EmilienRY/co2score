@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:flutter/services.dart';
 import 'scan.dart';
+import 'styles.dart';
 
 
 class pageScan extends StatefulWidget {
@@ -18,22 +18,20 @@ class _GeneratepageScanState extends State<pageScan> {
 
   @override
   Widget build(BuildContext context) {   //page d'accueil
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
-        child: AppBar(
-          backgroundColor: Colors.green,
-          centerTitle: true,
-          title: const Text('CO2 Score'),
-
+    return MaterialApp(
+      theme: AppStyles.themeData,
+      home : Scaffold(
+        appBar: AppBar(
+            title: const Text('CO2 Score'),
         ),
-      ),
+
       body: Stack(   // lecteur de qr codes
         children: <Widget>[
-          QRView(
+         QRView(
             key: qrKey,
             onQRViewCreated: _onQrViewCreated,
           ),
+
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -45,13 +43,12 @@ class _GeneratepageScanState extends State<pageScan> {
               ),
             ),
           ),
+
         ],
       ),
-
+      ),
     );
   }
-
-
 
 
   void _onQrViewCreated(QRViewController controller) {   // fonction d'écoute
@@ -69,11 +66,5 @@ class _GeneratepageScanState extends State<pageScan> {
       ).then((_) => controller.resumeCamera());
     });
   }
-
-
-
-
-
-
 
 }
