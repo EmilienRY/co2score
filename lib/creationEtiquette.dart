@@ -67,8 +67,29 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
               ),
               ElevatedButton(   //bouton pour générer pdf
                 onPressed: () async {
-                  String path = await makePdf(selectedPlats); //appel la fonction pour faire pdf et on recup le chemin d'accé
-                  ouverturePDF(path); //ouverture du pdf
+                  if (selectedPlats!=[]){
+                      String path = await makePdf(selectedPlats); //appel la fonction pour faire pdf et on recup le chemin d'accé
+                      ouverturePDF(path); //ouverture du pdf
+                  }
+                  else{
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Erreur"),
+                          content: Text("Veillez sélectionner au moins un plat dans votre menu"),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: Text("Créer le PDF"),
               ),
