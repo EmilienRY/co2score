@@ -8,7 +8,6 @@ class pageCom extends StatefulWidget {
 
 class _pageComState extends State
 
-
 {
   bool estConnecte = false;
 
@@ -21,7 +20,7 @@ class _pageComState extends State
   Future<void> verifierConnexion() async {
     try {
       print("j'essaye de me co");
-      var response = await http.get(Uri.parse('http://192.168.1.39:8080'));
+      var response = await http.get(Uri.parse('http://192.168.113.113:8080'));
       print("yo");
       // Vérifiez le code de statut de la réponse
       if (response.statusCode == 200) {

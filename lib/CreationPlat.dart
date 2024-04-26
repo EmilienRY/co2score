@@ -37,131 +37,14 @@ class _MyPageState extends State<pageCreation> {
         child: Column(
           children: [
             const SizedBox(height: 30),
-            TextField(
-              controller: _controllerNomPlat,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Nom du plat',
-              ),
-            ),
-            const SizedBox(height: 30),
-            TextField(
-              controller: _controllerPrix,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Prix du plat',
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                setState(() {
-                  ListIngredient.add(IngredientRow());
-                });
-              },
-            ),
 
-            Expanded(
-              child: ListView.builder(
-                itemCount: ListIngredient.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Autocomplete<String>(
-                            optionsBuilder: (TextEditingValue textEditingValue) {
-                              // Récupérer la liste des ingrédients similaires depuis la base de données
-                              if( textEditingValue.text != null && textEditingValue.text != "" && textEditingValue.text != " "){
-                                return DatabaseHelper.instance.getSimilarIngredients(textEditingValue.text);
-
-                              }
-                              else{
-                                return DatabaseHelper.instance.getVide();
-                              }
-
-                            },
-                            onSelected: (String selectedIngredient) {
-                              setState(() {
-                                ListIngredient[index].controllerIngredient.text = selectedIngredient;   // Mettre à jour le texte de l'ingrédient dans la ligne en cours
-
-                              });
-                            },
-                            fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
-                              return TextField(
-                                controller: textEditingController,
-                                focusNode: focusNode,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Ingrédient',
-                                ),
-                              );
-                            },
-                            optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
-                              return Align(
-                                alignment: Alignment.topLeft,
-                                child: Material(
-                                  elevation: 4.0,
-                                  child: Container(
-                                    constraints: BoxConstraints(maxHeight: 200.0),
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.all(8.0),
-                                      itemCount: options.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        final String option = options.elementAt(index);
-                                        return GestureDetector(
-                                          onTap: () {
-                                            onSelected(option);
-                                          },
-                                          child: ListTile(
-                                            title: Text(option),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            controller: ListIngredient[index].controllerQuantity,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Quantité',
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () => _supIngredient(index),
-                        ),
-                      ],
-
-                    );
-
-                },
-              ),
-            ),
-            const SizedBox(height: 30),
-            /* ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  ListIngredient.add(IngredientRow());
-                });
-              },
-              child: const Text('Ajouter un ingrédient'),
-            ),*/
-            const SizedBox(height: 30),
             Row(
 
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
 
+                SizedBox(width: 16),
 
                 ElevatedButton(
                   onPressed: () async {
@@ -354,6 +237,8 @@ class _MyPageState extends State<pageCreation> {
 
 
 
+
+
                 ElevatedButton(
                   onPressed: () async {
 
@@ -493,9 +378,136 @@ class _MyPageState extends State<pageCreation> {
                   child: const Text('Valider ingrédient'),
                 ),
 
-
+                SizedBox(width: 16),
               ],
             ),
+
+
+
+
+
+            const SizedBox(height: 30),
+            TextField(
+              controller: _controllerNomPlat,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Nom du plat',
+              ),
+            ),
+            const SizedBox(height: 30),
+            TextField(
+              controller: _controllerPrix,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Prix du plat',
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  ListIngredient.add(IngredientRow());
+                });
+              },
+            ),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: ListIngredient.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Autocomplete<String>(
+                            optionsBuilder: (TextEditingValue textEditingValue) {
+                              // Récupérer la liste des ingrédients similaires depuis la base de données
+                              if( textEditingValue.text != null && textEditingValue.text != "" && textEditingValue.text != " "){
+                                return DatabaseHelper.instance.getSimilarIngredients(textEditingValue.text);
+
+                              }
+                              else{
+                                return DatabaseHelper.instance.getVide();
+                              }
+
+                            },
+                            onSelected: (String selectedIngredient) {
+                              setState(() {
+                                ListIngredient[index].controllerIngredient.text = selectedIngredient;   // Mettre à jour le texte de l'ingrédient dans la ligne en cours
+
+                              });
+                            },
+                            fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                              return TextField(
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Ingrédient',
+                                ),
+                              );
+                            },
+                            optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  child: Container(
+                                    constraints: BoxConstraints(maxHeight: 200.0),
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.all(8.0),
+                                      itemCount: options.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final String option = options.elementAt(index);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onSelected(option);
+                                          },
+                                          child: ListTile(
+                                            title: Text(option),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: TextField(
+                            controller: ListIngredient[index].controllerQuantity,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Quantité',
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () => _supIngredient(index),
+                        ),
+
+                      ],
+
+                    );
+
+                },
+              ),
+            ),
+            const SizedBox(height: 30),
+            /* ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  ListIngredient.add(IngredientRow());
+                });
+              },
+              child: const Text('Ajouter un ingrédient'),
+            ),*/
+
+
 
 
 
