@@ -4,7 +4,7 @@ import 'menu.dart';
 import 'creationEtiquette.dart';
 import 'CreationPlat.dart';
 import 'styles.dart';
-
+import 'pageCom.dart';
 
 
 class hub extends StatefulWidget {
@@ -20,6 +20,7 @@ GlobalKey<NavigatorState> scanPageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> menuPageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> platPageKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> etiquettePageKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> etiquettePageCom = GlobalKey<NavigatorState>();
 
 class _hubState extends State<hub> {
   int _currentIndex = 0;
@@ -60,6 +61,14 @@ class _hubState extends State<hub> {
         );
       },
     ),
+    Navigator(
+      key: etiquettePageCom,
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => pageCom(),
+        );
+      },
+    ),
   ];
 
 
@@ -93,6 +102,7 @@ class _hubState extends State<hub> {
                   BottomNavigationBarItem(icon: Icon(chrome_reader_mode),label: "menu"),
                   BottomNavigationBarItem(icon: Icon(restaurant_menu),label: "plat"),
                   BottomNavigationBarItem(icon: Icon(article),label: "étiquette"),
+                  BottomNavigationBarItem(icon: Icon(cell_wifi),label: "pageMonde"),
                 ],
                 currentIndex: _currentIndex,
                 onTap: _onItemTapped,
@@ -118,6 +128,7 @@ class _hubState extends State<hub> {
   static const IconData restaurant_menu = IconData(0xe533, fontFamily: 'MaterialIcons');
   static const IconData qr_code_scanner = IconData(0xe4f7, fontFamily: 'MaterialIcons');
   static const IconData article = IconData(0xe0a2, fontFamily: 'MaterialIcons');
+  static const IconData cell_wifi = IconData(0xe14a, fontFamily: 'MaterialIcons');
 
 
   void _onItemTapped(int index) {
