@@ -77,8 +77,6 @@ class _pageMenuState extends State<pageMenu> {
                             ),
                           ).toList(),
 
-
-
                         ),
                       if (buttonTexts.isEmpty)
                         Text(

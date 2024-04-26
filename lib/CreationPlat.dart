@@ -34,7 +34,9 @@ class _MyPageState extends State<pageCreation> {
         title: Text('Créer un plat'),
       ),
       body: Center(
+
         child: Column(
+
           children: [
             const SizedBox(height: 30),
 

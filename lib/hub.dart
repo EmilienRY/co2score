@@ -102,7 +102,7 @@ class _hubState extends State<hub> {
                   BottomNavigationBarItem(icon: Icon(chrome_reader_mode),label: "menu"),
                   BottomNavigationBarItem(icon: Icon(restaurant_menu),label: "plat"),
                   BottomNavigationBarItem(icon: Icon(article),label: "étiquette"),
-                  BottomNavigationBarItem(icon: Icon(cell_wifi),label: "pageMonde"),
+                  BottomNavigationBarItem(icon: Icon(cell_wifi),label: "monde"),
                 ],
                 currentIndex: _currentIndex,
                 onTap: _onItemTapped,
@@ -128,7 +128,7 @@ class _hubState extends State<hub> {
   static const IconData restaurant_menu = IconData(0xe533, fontFamily: 'MaterialIcons');
   static const IconData qr_code_scanner = IconData(0xe4f7, fontFamily: 'MaterialIcons');
   static const IconData article = IconData(0xe0a2, fontFamily: 'MaterialIcons');
-  static const IconData cell_wifi = IconData(0xe14a, fontFamily: 'MaterialIcons');
+  static const IconData cell_wifi = IconData(0xe67c, fontFamily: 'MaterialIcons');
 
 
   void _onItemTapped(int index) {
