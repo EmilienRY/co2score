@@ -17,28 +17,31 @@ class dataBaseServ {
   static final columnIngredients = 'ingredients';
 
 
-  // Méthode pour insérer un plat sur le serveur
-  Future<int> insertPlat(Map<String, dynamic> plat) async {
-    // URL de votre serveur où envoyer les données
-    String url = 'http://192.168.113.113:8080/api/insertPlat';
+  void envoyerDonneesAuServeur(Map<String, dynamic> resto) async {
+    // Définis l'URL de ton serveur
+    var url = Uri.parse('http://192.168.113.113:8080/ajouter_resto');
 
-    // Envoi de la requête POST avec les données du plat
-    final response = await http.post(
-      Uri.parse(url),
-      body: json.encode(plat), // Conversion du plat en JSON
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+    // Convertis les données en format JSON
+    var body = jsonEncode(resto);
+
+    // Envoie la requête POST au serveur
+    var response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: body,
     );
 
-    // Vérification de la réponse du serveur
+    // Vérifie la réponse du serveur
     if (response.statusCode == 200) {
-      // Si la requête est réussie, vous pouvez traiter la réponse
-      // Par exemple, si le serveur renvoie l'ID du plat inséré :
-      return int.parse(response.body);
+      print('Données envoyées avec succès');
     } else {
-      // Si la requête a échoué, vous pouvez gérer l'erreur ici
-      throw Exception('Failed to insert plat');
+      print('Erreur lors de l\'envoi des données : ${response.statusCode}');
     }
   }
+
+
+
+
+
+
 }
