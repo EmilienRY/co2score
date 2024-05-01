@@ -73,7 +73,7 @@ class _ajouterRestoState extends State<ajouterResto> {
 
                   try {
                     dataBaseServ db=dataBaseServ();
-                    db.envoyerDonneesAuServeur(resto);
+                    db.envoyerResto(resto);
 
                     _controllerNomResto.clear();
                     _controllerAdresse.clear();

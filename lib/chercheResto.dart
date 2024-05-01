@@ -13,8 +13,8 @@ class chercheResto extends StatefulWidget {
 }
 
 class _chercheRestoState extends State<chercheResto> {
-  final TextEditingController _controllerNomPlat = TextEditingController();
-  final TextEditingController _controllerPrix = TextEditingController();
+  final TextEditingController _controllerNomResto = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,17 @@ class _chercheRestoState extends State<chercheResto> {
         title: Text('chercher les plats \n pour un établissement'),
       ),
       body: Center(
-
+        child: Column(
+            children: [
+              TextField(
+                controller: _controllerNomResto,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: "Nom de l'établissement",
+                ),
+              ),
+            ]
+        ),
       ),
     );
   }

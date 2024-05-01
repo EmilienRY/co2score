@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dataBaseServ.dart';
 import 'database.dart';
 
-class PlatInfo {
-  final String nom;
-  final Color couleur;
-  final String prix;
 
-  PlatInfo(this.nom, this.couleur, this.prix);
-}
 
-class IngredientRow {
-  TextEditingController controllerIngredient = TextEditingController();
-  TextEditingController controllerQuantity = TextEditingController();
-}
 
 class ajoutPlatResto extends StatefulWidget {
 
@@ -54,6 +45,73 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
         child: Column(
           children: [
 
+            ElevatedButton(
+              onPressed: () async {
+                // Vérifier si au moins un champ est vide
+                bool fieldsEmpty = _controllerNomEta.text.isEmpty || selectedPlats.isEmpty;
+
+                // Afficher un avertissement si au moins un champ est vide
+                if (fieldsEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text("Champs vides"),
+                        content: Text("Veuillez donner le nom de l'établissement et sélectionner au moins un plat."),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+                else{
+
+                  String nomResto= _controllerNomEta.text;
+
+                  final Map<String, List<PlatInfo>> val = {};
+                  val[nomResto] = selectedPlats;
+
+
+                  try {
+                    dataBaseServ db=dataBaseServ();
+                    db.envoyerPlatResto(val);
+
+
+
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Bien ajouté"),
+                          content: Text("L'ingrédient a bien été ajouté dans la base de donné"),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text("OK"),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                  } catch (e) {
+                    print("Erreur lors de l'insertion");
+                  }
+
+
+                }
+
+              },
+              child: const Text('Valider plat'),
+            ),
 
 
             TextField(
@@ -63,7 +121,6 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
                     labelText: "Nom de l'établissement",
                   ),
                 ),
-
 
             Text(
               "Choisissez les plats à ajouter à l'établissement :",
@@ -92,6 +149,10 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
                 },
               ),
             ),
+
+
+
+
           ],
         ),
 
@@ -120,36 +181,16 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
 
 
 
-  Future<Color> _getPlatColor(String platName) async {  // fonction pour recup couleur du plat dans base de donnée
+
+  Future<void> addPlat(String Nomplat) async {
     final dbHelper = DatabaseHelper.instance;
-    final plat = await dbHelper.getPlat(platName);
+    final plat = await dbHelper.getPlat(Nomplat);
     if (plat != null) {
-      final colorString = plat['couleur'] as String;
-      final color = await _parseColor(colorString);
-      if (color != null) {
-        return color;
-      }
+      setState(() {
+        selectedPlats.add(PlatInfo(plat['nom'],plat['ingredients'], plat['couleur'], plat['prix']));
+      });
     }
 
-    return Colors.black;  // si problème pour trouver couleur met du gris
-  }
-
-
-  Future<String> _getPlatPrice(String platName) async { // pour recup le prix du plat
-    final dbHelper = DatabaseHelper.instance;
-    final plat = await dbHelper.getPlat(platName);
-    if (plat != null) {
-      return plat['prix'] as String;
-    }
-    return '';
-  }
-
-  Future<void> addPlat(String plat) async {
-    var couleur = await _getPlatColor(plat);
-    var prix = await _getPlatPrice(plat);
-    setState(() {
-      selectedPlats.add(PlatInfo(plat, couleur, prix));
-    });
   }
 
 // Définir une fonction pour retirer un plat de selectedPlats
