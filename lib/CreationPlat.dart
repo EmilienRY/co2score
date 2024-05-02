@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'database.dart';
 import 'menu.dart';
 
-class IngredientRow {
+class IngredientRow { // classe pour les controlleurs des textfields de chaques lignes ajouté / sup pour les ingrédients
   TextEditingController controllerIngredient = TextEditingController();
   TextEditingController controllerQuantity = TextEditingController();
 }
@@ -16,12 +16,12 @@ class pageCreation extends StatefulWidget {
 }
 
 class _MyPageState extends State<pageCreation> {
-  final TextEditingController _controllerNomPlat = TextEditingController();
+  final TextEditingController _controllerNomPlat = TextEditingController(); // controleurs pour les textfields
   final TextEditingController _controllerPrix = TextEditingController();
 
-  List<IngredientRow> ListIngredient = [];
+  List<IngredientRow> ListIngredient = []; // liste des ingrédients
 
-  void _supIngredient(int index) {
+  void _supIngredient(int index) { // fonction pour sup un ingrédient de la liste
     setState(() {
       ListIngredient.removeAt(index);
     });
@@ -104,7 +104,7 @@ class _MyPageState extends State<pageCreation> {
                       // Tous les champs sont remplis et le nom du plat n'existe pas dans la base de données
 
                       List<String> ingredientsList = [];
-                      double finalCO2=0;
+                      double finalCO2=0; // calcul des émissions de CO2
                       double quantitePlat=0;
                       for (IngredientRow row in ListIngredient) {
                         String ingredient = row.controllerIngredient.text;
@@ -241,7 +241,7 @@ class _MyPageState extends State<pageCreation> {
 
 
 
-                ElevatedButton(
+                ElevatedButton(  // bouton pour enregistrer comme un ingrédient et non comme un plat
                   onPressed: () async {
 
                     // Vérifier si au moins un champ est vide
@@ -386,8 +386,6 @@ class _MyPageState extends State<pageCreation> {
 
 
 
-
-
             const SizedBox(height: 30),
             TextField(
               controller: _controllerNomPlat,
@@ -423,7 +421,7 @@ class _MyPageState extends State<pageCreation> {
                         Expanded(
                           child: Autocomplete<String>(
                             optionsBuilder: (TextEditingValue textEditingValue) {
-                              // Récupérer la liste des ingrédients similaires depuis la base de données
+                              // recup la liste des ingrédients similaires depuis la base de données
                               if( textEditingValue.text != null && textEditingValue.text != "" && textEditingValue.text != " "){
                                 return DatabaseHelper.instance.getSimilarIngredients(textEditingValue.text);
 
@@ -500,20 +498,6 @@ class _MyPageState extends State<pageCreation> {
               ),
             ),
             const SizedBox(height: 30),
-            /* ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  ListIngredient.add(IngredientRow());
-                });
-              },
-              child: const Text('Ajouter un ingrédient'),
-            ),*/
-
-
-
-
-
-
           ],
         ),
       ),

@@ -3,8 +3,6 @@ import 'dataBaseServ.dart';
 import 'database.dart';
 
 
-
-
 class ajoutPlatResto extends StatefulWidget {
 
   @override
@@ -12,22 +10,22 @@ class ajoutPlatResto extends StatefulWidget {
 }
 
 class _ajoutPlatRestoState extends State<ajoutPlatResto> {
-  final TextEditingController _controllerNomEta = TextEditingController();
-  List<PlatInfo> selectedPlats = [];
-  List<String> plats = [];
+  final TextEditingController _controllerNomEta = TextEditingController(); // controlleur du textfield
+  List<PlatInfo> selectedPlats = []; // liste des plats que l'on veut envoyer
+  List<String> plats = []; // liste des plats que l'on possède localement
 
   @override
   void initState() {
     super.initState();
-    fetchPlatsFromDatabase();
+    fetchPlatsFromDatabase();  // appel de la fonction pour recup tout les plats
   }
 
-  Future<void> fetchPlatsFromDatabase() async {   //pour recup tout les plats et les afficher
+  Future<void> fetchPlatsFromDatabase() async {   //pour recup tout les plats
     try {
       final dbHelper = DatabaseHelper.instance;
       final platsList = await dbHelper.queryAllPlats();
       setState(() {
-        plats = platsList.map((plat) => plat['nom'] as String).toList();
+        plats = platsList.map((plat) => plat['nom'] as String).toList(); // met les plats dans la variable plats
       });
     } catch (e) {
       print("Erreur lors de la récupération des plats depuis la base de données : $e"); //affiche ca si erreur
@@ -39,11 +37,15 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ajouter des plats à un établissement'),
+        title: Text('ajouter des plats à un établissement',style: TextStyle(fontSize: 16.0),),
       ),
       body: Center(
         child: Column(
           children: [
+            SizedBox(
+              height: 8.0,
+            ),
+
 
             ElevatedButton(
               onPressed: () async {
@@ -72,14 +74,14 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
                 }
                 else{
 
-                  String nomResto= _controllerNomEta.text;
+                  String nomResto= _controllerNomEta.text;  // recup du resto
 
-                  final Map<String, List<PlatInfo>> val = {};
+                  final Map<String, List<PlatInfo>> val = {}; // on met les plats dans un dictionnaire
                   val[nomResto] = selectedPlats;
 
 
                   try {
-                    dataBaseServ db=dataBaseServ();
+                    dataBaseServ db=dataBaseServ();  // appel de la fonction de dataBaseServ envoyerPlatResto
                     db.envoyerPlatResto(val);
 
 
@@ -89,7 +91,7 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Bien ajouté"),
-                          content: Text("L'ingrédient a bien été ajouté dans la base de donné"),
+                          content: Text("Les plats ont bien été ajouté à l'établissement"),
                           actions: <Widget>[
                             TextButton(
                               child: Text("OK"),
@@ -113,6 +115,11 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
               child: const Text('Valider plat'),
             ),
 
+            SizedBox(
+              height: 16.0,
+            ),
+
+
 
             TextField(
                   controller: _controllerNomEta,
@@ -122,26 +129,33 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
                   ),
                 ),
 
+            SizedBox(
+              height: 16.0,
+            ),
+
             Text(
               "Choisissez les plats à ajouter à l'établissement :",
             ),
 
+            SizedBox(
+              height: 16.0,
+            ),
+
+
             Expanded(
-              child: ListView.builder(
+              child: ListView.builder( // affiche la liste de tout les plats que l'on a dans notre appli
                 itemCount: plats.length,
                 itemBuilder: (BuildContext context, int index) {
                   final plat = plats[index];
                   return CheckboxListTile(
                     title: Text(plat),
                     value: selectedPlats.any((element) => element.nom == plat),
-                    onChanged: (bool? value){
+                    onChanged: (bool? value){  // ajoute a selectedPlat si on clique sur la checkbox du plat
                       setState(() {
                         if (value != null && value) {
                           addPlat(plat);
-                          //selectedPlats.add(PlatInfo(plat, await _getPlatColor(plat), await _getPlatPrice(plat)));
                         } else {
                           removePlat(plat);
-                          //selectedPlats.removeWhere((element) => element.nom == plat);
                         }
                       });
                     },
@@ -161,39 +175,18 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
   }
 
 
-  Future<Color?> _parseColor(String colorString) async {   // on recup couleurs (type PdfColor pour mettre dans pdf)
-    switch (colorString.toLowerCase().replaceAll(' ', '')) {
-      case 'rouge':
-        return Colors.red;
-      case 'vert':
-        return Colors.green;
-      case 'vertf':
-        return Color.fromRGBO(12, 126, 12, 1.0);
-      case 'orange':
-        return Color.fromRGBO(206, 125, 2, 1.0);
-      case 'jaune':
-        return Color.fromRGBO(153, 153, 0, 1);
-      default:
-        return null;
-    }
-  }
-
-
-
-
-
-  Future<void> addPlat(String Nomplat) async {
+  Future<void> addPlat(String Nomplat) async { // fonction qui ajoute un plat selectionné avec checkbox à selectedPlat
     final dbHelper = DatabaseHelper.instance;
     final plat = await dbHelper.getPlat(Nomplat);
     if (plat != null) {
       setState(() {
-        selectedPlats.add(PlatInfo(plat['nom'],plat['ingredients'], plat['couleur'], plat['prix']));
+        selectedPlats.add(PlatInfo(plat['nom'],plat['ingredients'], plat['couleur'], plat['prix'])); // ajoute sous la forme d'un PlatInfo pour pouvoir plus facilement recup les valeurs
       });
     }
 
   }
 
-// Définir une fonction pour retirer un plat de selectedPlats
+//enlève le plat de selectedPlats
   void removePlat(String plat) {
     setState(() {
       selectedPlats.removeWhere((element) => element.nom == plat);

@@ -25,9 +25,9 @@ class GeneratePdfPage extends StatefulWidget {
 }
 
 class _GeneratePdfPageState extends State<GeneratePdfPage> {
-  List<PlatInfo> selectedPlats = [];
+  List<PlatInfo> selectedPlats = [];  // plats qu'on l'on ajoute au pdf
   List<Future<PdfColor>> couleursPlats = [];   // liste de couleurs pour pdf
-  List<String> plats = [];
+  List<String> plats = []; // liste de tout les plats qu'on l'on a
 
   @override
   void initState() {
@@ -35,12 +35,12 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     fetchPlatsFromDatabase();
   }
 
-  Future<void> fetchPlatsFromDatabase() async {   //pour recup tout les plats et les afficher
+  Future<void> fetchPlatsFromDatabase() async {   //pour recup tout les plats qu'on l'on a
     try {
       final dbHelper = DatabaseHelper.instance;
-      final platsList = await dbHelper.queryAllPlats();
+      final platsList = await dbHelper.queryAllPlats(); // on appel la fonction queryAllPlats de dataBase.dart pour recup tout les plats
       setState(() {
-        plats = platsList.map((plat) => plat['nom'] as String).toList();
+        plats = platsList.map((plat) => plat['nom'] as String).toList(); // on formate le résultat pour l'exploiter plus facilement aprés
       });
     } catch (e) {
       print("Erreur lors de la récupération des plats depuis la base de données : $e"); //affiche ca si erreur
@@ -51,7 +51,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   @override
   Widget build(BuildContext context) {   //page de selection
     return MaterialApp(
-      theme: AppStyles.themeData,
+      theme: AppStyles.themeData, // permet d'affecter le thème définit dans styles.dart
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Créer une étiquette'),
@@ -101,7 +101,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                 'Choisissez les plats à inclure dans le PDF :',
               ),
               Expanded(
-                child: ListView.builder(
+                child: ListView.builder( // affiche tout les plats
                   itemCount: plats.length,
                   itemBuilder: (BuildContext context, int index) {
                     final plat = plats[index];
@@ -109,13 +109,11 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                       title: Text(plat),
                       value: selectedPlats.any((element) => element.nom == plat),
                       onChanged: (bool? value){
-                        setState(() {
+                        setState(() {  // ajoute / supprime de selectedPlats si coché / décoché
                           if (value != null && value) {
                             addPlat(plat);
-                            //selectedPlats.add(PlatInfo(plat, await _getPlatColor(plat), await _getPlatPrice(plat)));
                           } else {
                             removePlat(plat);
-                            //selectedPlats.removeWhere((element) => element.nom == plat);
                           }
                         });
                       },
@@ -134,7 +132,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   }
 
 
-  // Définir une fonction asynchrone pour ajouter un plat à selectedPlats
+  //  fonction pour ajouter un plat à selectedPlats
   Future<void> addPlat(String plat) async {
     var couleur = await _getPlatColor(plat);
     var prix = await _getPlatPrice(plat);
@@ -143,7 +141,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
     });
   }
 
-// Définir une fonction pour retirer un plat de selectedPlats
+// fonction pour retirer un plat de selectedPlats
   void removePlat(String plat) {
     setState(() {
       selectedPlats.removeWhere((element) => element.nom == plat);
@@ -151,19 +149,19 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   }
 
 
-
-  Future<String> makePdf(List<PlatInfo> selectedPlats) async {  //fonction de génération et ouverture pdf
-    Directory? downloadsDirectory = await getDownloadsDirectory();
+//fonction de génération et ouverture pdf
+  Future<String> makePdf(List<PlatInfo> selectedPlats) async {
+    Directory? downloadsDirectory = await getDownloadsDirectory(); // on recup le chemin vers répertoir de dl du téléphone
 
     if (downloadsDirectory == null) {
       throw FileSystemException("Impossible d'accéder au répertoire de téléchargement.");
     }
 
-    final qrImageData = await _generateQrImageData(selectedPlats); // Appel de la fonction _generateQrImageData pour faire le qrcode
+    final qrImageData = await _generateQrImageData(selectedPlats); // Appel de la fonction _generateQrImageData pour faire le qrcode global
     final Map<String, Uint8List> platQR = {};
 
     for (final plat in selectedPlats){
-      platQR[plat.nom] = await _generateQrUnique(plat, plat.couleur);
+      platQR[plat.nom] = await _generateQrUnique(plat, plat.couleur); // pour chaques plats selectionné on fait un pdf
 
     }
 
@@ -192,7 +190,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                         height: 75,
                         child: p.Image(
                             p.MemoryImage(
-                                platQR[platInfo.nom]!
+                                platQR[platInfo.nom]! // qr code du plat
                             )
                         ),
                       ),
@@ -200,9 +198,9 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
                   ),
                 ),
               p.SizedBox(height: 20), // Ajout d'un espace vertical entre chaque plat
-              p.Text("Pour voir tout le menu :"),   //qrcode
+              p.Text("Pour voir tout le menu :"),
 
-              p.Container(
+              p.Container( //qrcode global
                 width: 100,
                 height: 100,
                 child: p.Image(p.MemoryImage(qrImageData)),
@@ -215,7 +213,7 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
 
     String path = '${downloadsDirectory.path}/menu.pdf';   // la ou on va mettre le pdf
     final file = File(path);
-    await file.writeAsBytes(await pdf.save());
+    await file.writeAsBytes(await pdf.save()); // écriture du pdf
     print("Chemin : " + path);
     return path;   // on renvoi le chemin ou on a dl pdf
   }

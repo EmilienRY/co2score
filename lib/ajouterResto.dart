@@ -10,7 +10,7 @@ class ajouterResto extends StatefulWidget {
 }
 
 class _ajouterRestoState extends State<ajouterResto> {
-  final TextEditingController _controllerNomResto = TextEditingController();
+  final TextEditingController _controllerNomResto = TextEditingController(); // controlleur pour les textfield
   final TextEditingController _controllerAdresse = TextEditingController();
 
 
@@ -23,6 +23,10 @@ class _ajouterRestoState extends State<ajouterResto> {
       body: Center(
         child: Column(
           children: [
+            SizedBox(
+              height: 8.0,
+            ),
+
             TextField(
               controller: _controllerNomResto,
               decoration: InputDecoration(
@@ -30,12 +34,19 @@ class _ajouterRestoState extends State<ajouterResto> {
                 labelText: "Nom de l'établissement",
               ),
             ),
+            SizedBox(
+              height: 8.0,
+            ),
+
             TextField(
               controller: _controllerAdresse,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: "Nom de l'établissement",
+                labelText: "adresse",
               ),
+            ),
+            SizedBox(
+              height: 16.0,
             ),
 
 
@@ -65,25 +76,25 @@ class _ajouterRestoState extends State<ajouterResto> {
                   );
                 }
                 else{
-                  final resto = {
+                  final resto = { // recup des infos sur le resto
                     'nom': _controllerNomResto.text,
-                    'adresse': _controllerAdresse.text, // Correction de la clé
+                    'adresse': _controllerAdresse.text,
                   };
 
 
                   try {
-                    dataBaseServ db=dataBaseServ();
+                    dataBaseServ db=dataBaseServ(); //on appel la fonction envoyerResto de la classe dataBaseServ
                     db.envoyerResto(resto);
 
-                    _controllerNomResto.clear();
+                    _controllerNomResto.clear(); //vide les texts fields une fois envoyé
                     _controllerAdresse.clear();
 
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) {
+                      builder: (BuildContext context) {  // affiche un message quand ajouté
                         return AlertDialog(
                           title: Text("Bien ajouté"),
-                          content: Text("L'ingrédient a bien été ajouté dans la base de donné"),
+                          content: Text("L'établissement a bien été envoyé"),
                           actions: <Widget>[
                             TextButton(
                               child: Text("OK"),

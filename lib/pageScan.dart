@@ -14,10 +14,10 @@ class _GeneratepageScanState extends State<pageScan> {
   Barcode? result;
   QRViewController? controller;
 
-
+// page ou on affiche le scanner de qrcode et sert aussi de première page de l'appli
 
   @override
-  Widget build(BuildContext context) {   //page d'accueil
+  Widget build(BuildContext context) {
     return MaterialApp(
       theme: AppStyles.themeData,
       home : Scaffold(

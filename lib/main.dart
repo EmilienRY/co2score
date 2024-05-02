@@ -6,7 +6,7 @@ import 'hub.dart';
 import 'package:double_back_to_close/double_back_to_close.dart';
 
 
-void main() async {   //fonction main de l'app
+void main() async {   //fonction main de l'app, lance l'application
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'CO2Score',
       theme: AppStyles.themeData,
-      home:  DoubleBack(
+      home:  DoubleBack(  // permet de demander la confirmation pour quitter l'appli en affichant msg
         message: "Appuyez à nouveau pour quitter l'application",
         textStyle: TextStyle(fontSize: 17,color: Colors.white),
         child: hub(title: "CO2Score"),

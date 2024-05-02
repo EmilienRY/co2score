@@ -9,16 +9,15 @@ class pageMenu extends StatefulWidget {
 }
 
 class _pageMenuState extends State<pageMenu> {
-  List<String> buttonTexts = [];
+  List<String> buttonTexts = []; // liste des plats
 
-  PageController _pageController = PageController(initialPage: 0);
   @override
-  void initState() {
+  void initState() { // on commence par charger touts les plats
     super.initState();
     _loadData();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData() async { //fonction qui charge les plats depuis la BD et affecte à variable buttonTexts
     try {
       final plats = await DatabaseHelper.instance.queryAllPlats();
       setState(() {
@@ -31,8 +30,8 @@ class _pageMenuState extends State<pageMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( // Utilisez MaterialApp pour appliquer le thème à toute l'application
-      theme: AppStyles.themeData, // Utilisez le thème défini dans styles.dart
+    return MaterialApp(
+      theme: AppStyles.themeData, //thème défini dans styles.dart
       home: Scaffold(
         appBar: AppBar(
           title: Text('Liste des plats'),
@@ -53,14 +52,14 @@ class _pageMenuState extends State<pageMenu> {
                     children: [
                       SizedBox(height: 20),
 
-                      if (buttonTexts.isNotEmpty)
+                      if (buttonTexts.isNotEmpty) // si on a des plats dans la bd
                         Column(
 
                           children: buttonTexts.map(
                                 (text) => ListTile(
                               title: Text(text),
                                   trailing: IconButton(
-                                icon: Icon(Icons.delete),
+                                icon: Icon(Icons.delete),  // bouton pour sup le plat de la bd
                                 onPressed: () {
                                   _deletePlat(text);
                                 },
@@ -68,17 +67,16 @@ class _pageMenuState extends State<pageMenu> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => pageVisu(recette: text),
+                                    builder: (context) => pageVisu(recette: text), // bouton qui permet d'aller vers page pour visualiser les infos du plat
                                   ),
                                 );
                               },
-                              // Envelopper le bouton de texte avec le style du thème
 
                             ),
                           ).toList(),
 
                         ),
-                      if (buttonTexts.isEmpty)
+                      if (buttonTexts.isEmpty) // si pas de plats on affiche msg
                         Text(
                           'ajoutez des plats pour les voir apparaitre ici', style: TextStyle(fontSize: 18),),
                     ],
@@ -92,7 +90,7 @@ class _pageMenuState extends State<pageMenu> {
     );
   }
 
-  void _deletePlat(String nomPlat) async {
+  void _deletePlat(String nomPlat) async { // fonction pour supprimer un plat de la BD
     try {
       await DatabaseHelper.instance.deletePlat(nomPlat);
       _loadData();

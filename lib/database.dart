@@ -30,7 +30,7 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
 
     bool exists = await databaseExists(path);    // on verif si la bd existe déjà
 
-    if (!exists) {   // Si la bd n'existe pason copie depuis les assets
+    if (!exists) {   // Si la bd n'existe pas on copie depuis les assets
       ByteData data = await rootBundle.load(join("assets", _databaseName));
       List<int> bytes =
       data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -95,7 +95,7 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
 
   // ---------------------- opérations sur les ingrédients -------------------------------
 
-  Future<List<Map<String, dynamic>>> queryAllIngredients() async {   // pour recup tout les plats de la bd ( pas utilisé pour l'instant mais peut être plus tard)
+  Future<List<Map<String, dynamic>>> queryAllIngredients() async {   // pour recup tout les ingrédients de la bd
     Database db = await instance.database;
     final ingrs=await db.query(tableIngr);
     print(ingrs);
@@ -103,7 +103,7 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
   }
 
 
-  Future<int> insertIngredient(Map<String, dynamic> ingre) async {   // rajout d'un plat
+  Future<int> insertIngredient(Map<String, dynamic> ingre) async {   // rajout d'un ingrédient
     Database db = await instance.database;
     return await db.insert(tableIngr, ingre);
   }
@@ -138,7 +138,7 @@ class DatabaseHelper {   // classe avec fonctions pour gérer la base de donnée
     return ingre; // on recup les ingrédients sous forme de liste de string
   }
 
-  Future<List<String>> getVide() async {
+  Future<List<String>> getVide() async { // pour recup une liste vide, utile dans création plat lorsque user n'a encore rien saisie ou que un espace
     List<String> ingre=[];
     return ingre;
   }

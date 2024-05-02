@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// on définit ici le style des différents éléments de l'application
+
 class AppStyles {
   // Couleurs
   static const Color primaryColor = Color(0xFF21BF65);

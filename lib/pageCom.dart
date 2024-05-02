@@ -4,14 +4,13 @@ import 'chercheResto.dart';
 import 'ajouterResto.dart';
 import 'ajoutPlatResto.dart';
 
-class pageCom extends StatefulWidget {
+class pageCom extends StatefulWidget {  // page ou on test si serveur en ligne
   @override
   _pageComState createState() => _pageComState();
 }
 
 class _pageComState extends State {
-  bool estConnecte = false;
-  final TextEditingController _controllerPrix = TextEditingController();
+  bool estConnecte = false; // false de base
 
   @override
   void initState() {
@@ -19,27 +18,22 @@ class _pageComState extends State {
     verifierConnexion();
   }
 
-  Future<void> verifierConnexion() async {
+  Future<void> verifierConnexion() async { // fonction qui vérifie si serveur en ligne
     try {
-      print("j'essaye de me co");
-      var response = await http.get(Uri.parse('http://192.168.113.113:8080'));
-      print("yo");
+      var response = await http.get(Uri.parse('http://192.168.50.113:8080'));
       // Vérifiez le code de statut de la réponse
       if (response.statusCode == 200) {
-        print("bien co");
         setState(() {
-          estConnecte = true;
+          estConnecte = true;  // si il est en ligne alors estConnecte passe à true
         });
       } else {
-        print("pas co");
         setState(() {
-          estConnecte = false;
+          estConnecte = false; // si il n'est pas en ligne alors estConnecte passe à false ( cas ou le serveur était en ligne au début utilisation appli puis arrète)
         });
       }
     } catch (e) {
-      print("erreur");
       setState(() {
-        estConnecte = false;
+        estConnecte = false; // cas ou il y a une erreur on met à false
       });
     }
   }
@@ -51,7 +45,7 @@ class _pageComState extends State {
         title: Text('Statut de connexion'),
       ),
       body: estConnecte
-            ? Scaffold(  // on arrive à se co au serv
+            ? Scaffold(  // on arrive à se co au serv et on met les boutons vers pages pour intéragir avec
               body: Center(
                   child: Column(
                       children: [
