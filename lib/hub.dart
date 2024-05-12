@@ -104,7 +104,7 @@ class _hubState extends State<hub> {
                   BottomNavigationBarItem(icon: Icon(chrome_reader_mode),label: "menu"),
                   BottomNavigationBarItem(icon: Icon(restaurant_menu),label: "plat"),
                   BottomNavigationBarItem(icon: Icon(article),label: "étiquette"),
-                  BottomNavigationBarItem(icon: Icon(cell_wifi),label: "monde"),
+                  BottomNavigationBarItem(icon: Icon(cell_wifi),label: "connexion"),
                 ],
                 currentIndex: _currentIndex,
                 onTap: _onItemTapped,

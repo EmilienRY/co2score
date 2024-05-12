@@ -115,7 +115,7 @@ class _ajouterRestoState extends State<ajouterResto> {
                 }
 
               },
-              child: const Text('Valider plat'),
+              child: const Text('Ajouter'),
             ),
 
 

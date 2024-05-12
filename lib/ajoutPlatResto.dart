@@ -112,7 +112,7 @@ class _ajoutPlatRestoState extends State<ajoutPlatResto> {
                 }
 
               },
-              child: const Text('Valider plat'),
+              child: const Text('Ajouter'),
             ),
 
             SizedBox(

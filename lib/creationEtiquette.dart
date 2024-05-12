@@ -272,7 +272,6 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   Future<Uint8List> _generateQrImageData(List<PlatInfo> selectedPlats) async {  // génération du qrcode à partir de la liste des plats selctionnés
     final StringBuffer qrDataBuffer = StringBuffer();
 
-
     for (int i = 0; i < selectedPlats.length; i++) {  // on fait la chaine pour le qr code
       final plat = await _getPlatIngredients(selectedPlats[i].nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
       if (plat != null) {
@@ -312,48 +311,38 @@ class _GeneratePdfPageState extends State<GeneratePdfPage> {
   Future<Uint8List> _generateQrUnique(PlatInfo selectedPlat,Color couleur) async {  // génération d'un qrcode de couleur'
     final StringBuffer qrDataBuffer = StringBuffer();
 
-
-    final plat = await _getPlatIngredients(selectedPlat.nom);  // appel de fonction qui recup tout les ingrédient du plat depuis bd
-    if (plat != null) {
+    final plat = await _getPlatIngredients(selectedPlat.nom);  // appel de fonction
+    if (plat != null) {                      // qui recup tout les ingrédient du plat depuis bd
       final platData = {
         'nom': plat['nom'],
         'couleur': plat['couleur'],
         'ingredients': plat['ingredients'],
         'emission': plat['emission']
       };
-      final platJson = jsonEncode(platData);  //on fait chaine au format json pour plus de lisibilité
-      qrDataBuffer.write(platJson);
+      final platJson = jsonEncode(platData);  //on fait chaine au format
+      qrDataBuffer.write(platJson);           // json pour plus de lisibilité
     }
-
-
     final compressedData = utf8.encode(qrDataBuffer.toString());  // on compresse les donne (si on ne le fait pas le qrcode généré peut le pas être lisible)
     final compressedDataString = base64.encode(compressedData);
-
-    final qrPainter = QrPainter(        // Création du QR code avec les données compressées
-
+    final qrPainter = QrPainter(     // Création du QR code avec les données compressées
       data: compressedDataString,
       version: QrVersions.auto,
       gapless: true,
       color: couleur,
     );
 
-    final qrCode = await qrPainter.toImageData(2000.0); // on donne une grande taille pour éviter bug qui coupe le qr code à la génération
-    if (qrCode != null) {
+    final qrCode = await qrPainter.toImageData(2000.0); // on donne une grande taille pour
+    if (qrCode != null) {                     //éviter bug qui coupe le qr code à la génération
       return Uint8List.fromList(qrCode.buffer.asUint8List());  // on retourne le qrcode
     } else {
       throw Exception("Erreur lors de la génération du QR code");
     }
   }
 
-
-
-
-
   Future<Map<String, dynamic>?> _getPlatIngredients(String platName) async {  // recup les infos du plat depuis bd
     final dbHelper = DatabaseHelper.instance;
     final plat = await dbHelper.getPlat(platName);
     return plat;
   }
-
 
 }

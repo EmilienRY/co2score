@@ -42,7 +42,7 @@ class _pageComState extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statut de connexion'),
+        title: Text('Connexion'),
       ),
       body: estConnecte
             ? Scaffold(  // on arrive à se co au serv et on met les boutons vers pages pour intéragir avec
